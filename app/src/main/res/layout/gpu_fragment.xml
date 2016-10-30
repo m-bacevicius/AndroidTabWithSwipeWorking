@@ -14,39 +14,15 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="GPU Core"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/graph"
                 android:layout_width="match_parent"
                 android:layout_height="200dip" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="GPU Temp"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/graph2"
                 android:layout_width="match_parent"
                 android:layout_height="200dip" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="GPU Load"
-                android:id="@+id/textView"
-                android:layout_gravity="center_horizontal" />
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/graph3"

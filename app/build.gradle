@@ -31,4 +31,6 @@ dependencies {
     compile 'com.android.support:cardview-v7:24.0.+'
     compile project(path: ':lib')
     compile 'com.jjoe64:graphview:4.2.1'
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.0'
+    compile files('libs/MPAndroidChart-3.0.0/gradle/wrapper/gradle-wrapper.jar')
 }

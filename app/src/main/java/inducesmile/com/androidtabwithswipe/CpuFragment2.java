@@ -49,15 +49,10 @@ public class CpuFragment2 extends Fragment {
 
 
     private double graphLastXValue = 5d;
-    static final String JDBCPrefix = "jdbc:mysql://";
-    public static String IP = "193.219.36.33";
-    public static String Port = "43431";
-    public static String USER = "root";
-    public static String PASS = "sdsd";
-    public static String[] CoreTemp;
-    public static String[] CoreClock;
-    public static String[] CoreLoad;
-    public int NumberOfCores;
+    private static String[] CoreTemp;
+    private static String[] CoreClock;
+    private static String[] CoreLoad;
+    private int NumberOfCores;
     private static String DeviceName;
 
     @Override

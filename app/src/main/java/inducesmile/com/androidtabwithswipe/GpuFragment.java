@@ -16,6 +16,8 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ComputerOuterClass;
+import com.example.computerServiceGrpc;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.BarGraphSeries;
@@ -30,6 +32,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 
 public class GpuFragment extends Fragment {
 
@@ -46,14 +51,9 @@ public class GpuFragment extends Fragment {
     private double graphLastXValue = 5d;
     private double graph2LastXValue = 5d;
     private double graph3LastXValue = 5d;
-    static final String JDBCPrefix = "jdbc:mysql://";
-    public static String IP = "193.219.36.33";
-    public static String Port = "43431";
-    public static String USER = "root";
-    public static String PASS = "sdsd";
-    public static String GpuTemp = "34";
-    public static String GpuLoad = "34";
-    public static String GpuClock = "34";
+    private static String GpuTemp = "34";
+    private static String GpuLoad = "34";
+    private static String GpuClock = "34";
     //private String GpuCoreTemp = "43";
 
     @Override
@@ -113,9 +113,13 @@ public class GpuFragment extends Fragment {
         mTimer1 = new Runnable() {
             @Override
             public void run() {
-                //getSqlData();
-                //mSeries1.resetData(generateData());
-                //mSeries1.resetData(Double.valueOf(data));
+                try {
+                    getGrpcData(readFromPref());
+                }
+                catch (Exception e)
+                {
+                    Log.e("Pref exception", e.toString());
+                }
                 graphLastXValue += 1d;
                 mSeries1.appendData(new DataPoint(graphLastXValue, Double.valueOf(GpuClock)), true, 40);
                 mHandler.postDelayed(this, 1000);
@@ -156,71 +160,21 @@ public class GpuFragment extends Fragment {
         super.onPause();
     }
 
-    public void getSqlData() {
-        // JDBC driver name and database URL
-        final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-        //final String DB_URL = "jdbc:mysql://193.219.36.33:43431/javabase";
-        final String DB_URL = JDBCPrefix + IP + ':' + Port + '/' + "javabase";
-
-        //  Database credentials
-
-        Connection conn = null;
-        Statement stmt = null;
-
-        try {
-            //STEP 2: Register JDBC driver
-            Class.forName("com.mysql.jdbc.Driver");
-
-            //STEP 3: Open a connection
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-            //STEP 4: Execute a query
-            System.out.println("Creating statement...");
-            stmt = conn.createStatement();
-            String sql;
-            sql = "SELECT * FROM Pcs ORDER BY id DESC LIMIT 1;";
-            ResultSet rs = stmt.executeQuery(sql);
-
-            //STEP 5: Extract data from result set
-            while (rs.next()) {
-                //Retrieve by column name
-                //String last = rs.getString("last");
-                /*CpuCoreTemps = rs.getString("CpuCoresTemp");
-                String content = rs.getString("CpuPackageTemp");*/
-                GpuTemp  = rs.getString("GpuTemp");
-                GpuClock = rs.getString("GpuClock");
-                GpuLoad = rs.getString("GpuLoad");
-
-                //data = content;
-                //Log.e("GOT DATA: ", CpuCoreTemps);
-
-            }
-            //STEP 6: Clean-up environment
-            rs.close();
-            stmt.close();
-            conn.close();
-        } catch (SQLException se) {
-            //Handle errors for JDBC
-            se.printStackTrace();
-        } catch (Exception e) {
-            //Handle errors for Class.forName
-            e.printStackTrace();
-        } finally {
-            //finally block used to close resources
-            try {
-                if (stmt != null)
-                    stmt.close();
-            } catch (SQLException se2) {
-            }// nothing we can do
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }//end finally try
-        }//end try
-        System.out.println("Goodbye!");
+    public void getGrpcData(String name) throws InterruptedException {
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43431)
+                .usePlaintext(true)
+                .build();
+        //ComputerOuterClass.ComputerName request = ComputerOuterClass.ComputerName.newBuilder().setName(name).build();
+        computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);
+        ComputerOuterClass.Computer response = stub.getRealtimeComputerWithName(ComputerOuterClass.ComputerName.newBuilder().setName(name).build());
+        GpuClock = response.getGpuClock();
+        GpuLoad = response.getGpuLoad();
+        GpuTemp = response.getGpuTemp();
+    }
+    String readFromPref() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String name = settings.getString("name", "");
+        return name;
     }
 
 }

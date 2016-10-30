@@ -26,6 +26,7 @@
         </activity>
         <activity android:name=".TestActivity2"/>
         <activity android:name=".ListActivity"/>
+        <activity android:name=".ChartTest"/>
     </application>
 
 </manifest>

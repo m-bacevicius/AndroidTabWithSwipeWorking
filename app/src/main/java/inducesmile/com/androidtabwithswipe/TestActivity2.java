@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.ComputerOuterClass;
 import com.example.computerServiceGrpc;
+import com.github.mikephil.charting.charts.Chart;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -47,7 +48,7 @@ public class TestActivity2 extends Activity {
         });
         ((Button)findViewById(R.id.goToTest)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ChartTest.class);
                 startActivity(intent);
             }
         });
