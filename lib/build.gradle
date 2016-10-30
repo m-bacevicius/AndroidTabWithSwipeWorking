@@ -1,0 +1,64 @@
+/*apply plugin: 'java'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}*/
+
+apply plugin: 'java'
+apply plugin: 'com.google.protobuf'
+
+
+apply plugin: 'idea'
+
+// Allow intellij projects to refer to generated-sources
+idea {
+    module {
+        // The whole build dir is excluded by default, but we need build/generated-sources,
+        // which contains the generated proto classes.
+        excludeDirs = [file('.gradle')]
+        if (buildDir.exists()) {
+            excludeDirs += files(buildDir.listFiles())
+            excludeDirs -= file("$buildDir/generated-sources")
+        }
+    }
+}
+//endregion
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    //sourceCompatibility = 1.7
+    //targetCompatibility = 1.7
+
+    compile 'com.google.guava:guava:18.0'
+    compile 'com.google.protobuf:protobuf-java:3.0.0'
+    compile 'com.google.code.findbugs:jsr305:3.0.0'
+    // we cannot use the following dependency as com.google.auth:google-auth-library-oauth2-http:0.1.0 seems to be unavailable right now
+    //compile 'io.grpc:grpc-all:0.7.1'
+
+    // these libraries are necessary for the server
+    compile 'io.netty:netty-all:4.1.0.Beta5'
+    compile 'com.twitter:hpack:0.11.0'
+
+    // You need to build grpc-java to obtain these libraries below.
+    compile 'io.grpc:grpc-okhttp:0.15.0'
+    compile 'io.grpc:grpc-protobuf-lite:0.15.0'
+    compile 'io.grpc:grpc-stub:0.15.0'
+
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+
+}
+
+
+
+
+/*apply plugin: 'java'
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.google.protobuf:protoc:3.1.0-build2'
+    compile 'io.grpc:grpc-all:1.0.1'
+}
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'*/
