@@ -16,8 +16,9 @@
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/graph"
-                android:layout_width="match_parent"
-                android:layout_height="200dip" />
+                android:layout_width="wrap_content"
+                android:layout_height="200dip"
+                android:layout_gravity="right" />
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/graph2"

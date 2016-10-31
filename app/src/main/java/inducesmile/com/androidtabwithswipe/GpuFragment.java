@@ -75,8 +75,8 @@ public class GpuFragment extends Fragment {
         graph.addSeries(mSeries1);
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setScalable(true);
-        //graph.getViewport().setMaxX(4.5);
-        //graph.getViewport().setMinX(0.5);
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setMaxX(440);
         graph.getLegendRenderer().setVisible(true);
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.MIDDLE);
 
@@ -98,7 +98,7 @@ public class GpuFragment extends Fragment {
         mSeries3 = new LineGraphSeries<>();
         mSeries3.setTitle("GPU Load");
         mSeries3.setAnimated(true);
-        graph3.addSeries(mSeries1);
+        graph3.addSeries(mSeries3);
         graph3.getViewport().setXAxisBoundsManual(true);
         graph3.getViewport().setMaxX(120);
         graph3.getViewport().setScalable(true);
