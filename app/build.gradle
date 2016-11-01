@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "inducesmile.com.androidtabwithswipe"
         minSdkVersion 21
-        targetSdkVersion 17
+        targetSdkVersion 19
         versionCode 1
         versionName "1.0"
         multiDexEnabled true

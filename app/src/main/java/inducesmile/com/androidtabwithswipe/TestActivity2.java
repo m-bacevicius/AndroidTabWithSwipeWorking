@@ -1,11 +1,16 @@
 package inducesmile.com.androidtabwithswipe;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -52,6 +57,12 @@ public class TestActivity2 extends Activity {
                 startActivity(intent);
             }
         });
+        ((Button)findViewById(R.id.button3)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getNotification2();
+                //getNotification();
+            }
+        });
 
         /*try{
             ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43432)
@@ -73,6 +84,52 @@ public class TestActivity2 extends Activity {
         }*/
 
     }
+
+    public void getNotification2()
+    {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder
+                .setContentTitle("Content Title")
+                .setContentText("This is a content test")
+                .setSmallIcon(R.drawable.temperature)
+                //.setStyle(new NotificationCompat.BigTextStyle())
+                ;
+        // Setting notification style
+        Intent intent = new Intent();
+
+
+        PendingIntent contentIntent = PendingIntent.getActivity(TestActivity2.this, 0, intent, 0);
+        builder.setContentIntent(contentIntent);
+
+        Intent realtimeIntent = new Intent(getApplicationContext(), MainActivity.class);
+        PendingIntent realtime = PendingIntent.getActivity(this, 0, realtimeIntent, 0);
+        builder.addAction(R.mipmap.ic_flash, "SEE REALTIME", realtime);
+
+        Intent chartIntent = new Intent(getApplicationContext(), ChartTest.class);
+        PendingIntent chartPendlingIntent = PendingIntent.getActivity(this, 0, chartIntent, 0);
+        builder.addAction(R.mipmap.ic_chart, "SEE CHART", chartPendlingIntent);
+
+        Notification notification = builder.build();
+        NotificationManagerCompat.from(this).notify(0, notification);
+    }
+
+    public void getNotification ()
+    {
+        Intent intent = new Intent();
+        PendingIntent pIntent = PendingIntent.getActivity(TestActivity2.this, 0, intent, 0);
+        Notification notification = new Notification.Builder(TestActivity2.this)
+                .setTicker("Ticker Title")
+                .setContentTitle("Content Title")
+                .setContentText("This is a content test")
+                .setSmallIcon(R.drawable.temperature)
+                .addAction(R.mipmap.ic_chart, "Ignore", pIntent)
+                //.addAction(R.drawable.glass, "Investigate", pIntent)
+                .setContentIntent(pIntent).getNotification();
+        notification.flags = Notification.FLAG_AUTO_CANCEL;
+        NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notification);
+    }
+
     String doRead()
     {
         String filename = "myfile";
