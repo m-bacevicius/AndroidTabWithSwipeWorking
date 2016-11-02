@@ -54,7 +54,7 @@ public class ChartTest extends Activity {
             public void onClick(View v) {
                 //getNotification(v);
                 //setAlarm(v);
-                getNotification2();
+                //getNotification2();
 
             }
         });
@@ -74,50 +74,6 @@ public class ChartTest extends Activity {
         chart.animateX(3000, Easing.EasingOption.EaseInOutSine);
         chart.setData(lineData);
         chart.invalidate(); // refresh
-    }
-
-    public void getNotification ()
-    {
-        Intent intent = new Intent();
-        PendingIntent pIntent = PendingIntent.getActivity(ChartTest.this, 0, intent, 0);
-        Notification notification = new Notification.Builder(ChartTest.this)
-                .setTicker("Ticker Title")
-                .setContentTitle("Content Title")
-                .setContentText("This is a content test")
-                .setSmallIcon(R.drawable.temperature)
-                .addAction(R.mipmap.ic_launcher, "Ignore", pIntent)
-                //.addAction(R.drawable.glass, "Investigate", pIntent)
-                .setContentIntent(pIntent).getNotification();
-        notification.flags = Notification.FLAG_AUTO_CANCEL;
-        NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notification);
-    }
-
-    public void getNotification2()
-    {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-
-        Intent realtimeIntent = new Intent(getApplicationContext(), MainActivity.class);
-        PendingIntent realtime = PendingIntent.getActivity(this, 0, realtimeIntent, 0);
-
-        builder
-                .setContentTitle("Content Title")
-                .setContentText("This is a content test")
-                .setSmallIcon(R.drawable.temperature)
-                .addAction(R.drawable.chart, "string", realtime)
-                .setStyle(new NotificationCompat.BigTextStyle());
-        // Setting notification style
-        Intent intent = new Intent();
-        //Intent realtimeIntent = new Intent(getApplicationContext(), MainActivity.class);
-
-        PendingIntent contentIntent = PendingIntent.getActivity(ChartTest.this, 0, intent, 0);
-        builder.setContentIntent(contentIntent);
-
-        //PendingIntent realtime = PendingIntent.getActivity(this, 0, realtimeIntent, 0);
-        //builder.addAction(R.mipmap.ic_launcher, "SEE CHART", realtime);
-
-        Notification notification = builder.build();
-        NotificationManagerCompat.from(this).notify(0, notification);
     }
 
     public void setAlarm(View view)
