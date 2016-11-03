@@ -5,10 +5,12 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -42,28 +44,29 @@ import io.grpc.ManagedChannelBuilder;
  */
 
 public class ChartTest extends Activity {
+
+    List<Entry> entries = new ArrayList<Entry>();
+    LineChart chart;
+    ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chart_test);
 
-        LineChart chart = (LineChart) findViewById(R.id.chart);
-        List<Entry> entries = new ArrayList<Entry>();
+        dialog = ProgressDialog.show(ChartTest.this, "",
+                "Loading your chart. Please wait...", true);
 
-        ((Button)findViewById(R.id.button2)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //getNotification(v);
-                //setAlarm(v);
-                //getNotification2();
+        chart = (LineChart) findViewById(R.id.chart);
 
-            }
-        });
         try {
-            entries = fillUpTheDataSeries(getMap());
+            //entries = fillUpTheDataSeries(getMap());
+            //startTestThread();
+            GetRate asyncRate = new GetRate();
+            asyncRate.execute();
         }
         catch (Exception e)
         {}
-        LineDataSet dataSet = new LineDataSet(entries, "Cpu package temp"); // add entries to dataset
+        /*LineDataSet dataSet = new LineDataSet(entries, "Cpu package temp"); // add entries to dataset
         dataSet.setColor(Color.BLUE);
         dataSet.setDrawCircles(false);
         dataSet.setFillColor(Color.BLUE);
@@ -73,8 +76,47 @@ public class ChartTest extends Activity {
         //chart.animateY(3000);
         chart.animateX(3000, Easing.EasingOption.EaseInOutSine);
         chart.setData(lineData);
-        chart.invalidate(); // refresh
+        chart.invalidate(); // refresh*/
     }
+
+    private class GetRate extends AsyncTask<Void, Integer, Map<Integer, ComputerOuterClass.Computer>> {
+
+        @Override
+        protected Map<Integer, ComputerOuterClass.Computer> doInBackground(Void... params) {
+            Map<Integer, ComputerOuterClass.Computer> map = getMap();
+            Log.d("doInBackground", "Getting data");
+            return map;
+        }
+
+        @Override
+        protected void onPostExecute(Map<Integer, ComputerOuterClass.Computer> result) {
+            // Do whatever you need with the string, you can update your UI from here
+            entries = fillUpTheDataSeries(result);
+            Log.d("onPostExecute", "Filling up data");
+            LineDataSet dataSet = new LineDataSet(entries, "Cpu package temp"); // add entries to dataset
+            dataSet.setColor(Color.BLUE);
+            dataSet.setDrawCircles(false);
+            dataSet.setFillColor(Color.BLUE);
+            dataSet.setDrawFilled(true);
+
+            LineData lineData = new LineData(dataSet);
+            //chart.animateY(3000);
+            chart.animateX(3000, Easing.EasingOption.EaseInOutSine);
+            chart.setData(lineData);
+            chart.invalidate(); // refresh
+            dialog.hide();
+        }
+    }
+
+    /*protected void startTestThread() {
+        Thread t = new Thread() {
+            public void run() {
+
+                entries = fillUpTheDataSeries(getMap());
+            }
+        };
+        t.start();
+    }*/
 
     public void setAlarm(View view)
     {
@@ -93,12 +135,8 @@ public class ChartTest extends Activity {
                 .build();
         computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);
         ComputerOuterClass.ComputerListResponse response = stub.getComputerList(ComputerOuterClass.Empty.newBuilder().build());
-        //ComputerOuterClass.Computer response = stub.getRealtimeComputer(ComputerOuterClass.Empty.newBuilder().build());
-        System.out.print(response + "The count " + response.getComputerListCount() + '\n');
+       // System.out.print(response + "The count " + response.getComputerListCount() + '\n');
         Map<Integer, ComputerOuterClass.Computer> map = response.getComputerListMap();
-        /*for (int x = 0; x < map.size(); x++) {
-            System.out.println(map.get(x).getCpuCoreTemp());
-        }*/
         return map;
     }
 
@@ -112,7 +150,7 @@ public class ChartTest extends Activity {
             String data = tab.getDate();
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date();
-            double temp = Double.valueOf(tab.getCpuPackageTemp());
+            double temp = Double.valueOf(tab.getCpuPackageLoad());
             try {
                 date = dateFormat.parse(data);// all done
             } catch (Exception e) {
@@ -125,8 +163,6 @@ public class ChartTest extends Activity {
             if (Double.isNaN(temp)) {
                 Log.e("", "temp is null");
             }
-            Log.e("DATE", date.toString());
-            Log.d("TEMP", String.valueOf(temp));
             //mSeries1.appendData(new DataPoint(date, temp), true, 40);
             counter++;
             entries.add(new Entry(counter, (int) temp));

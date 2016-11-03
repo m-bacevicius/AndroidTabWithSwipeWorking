@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -28,17 +29,7 @@ import java.io.UnsupportedEncodingException;
 
 public class TestActivity2 extends Activity {
 
-    /*CountDownTimer timer3 = new CountDownTimer(1000, 1000) { // adjust the milli seconds here         this is working;
-
-        public void onTick(long millisUntilFinished) {
-            Log.e("TIMER", "IS WORKING");
-
-        }
-
-        public void onFinish() {
-            timer3.start();
-        }
-    };*/
+    private static Context mContext;
     TimerSingleton timer = TimerSingleton.getInstance();
 
     @Override
@@ -46,10 +37,16 @@ public class TestActivity2 extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_activity2);
 
-        if (!timer.isRunning())
+        mContext = getApplicationContext();
+
+        if (!timer.isRunning() && readFromPref() != "")
         {
             timer.start();
             ((TextView)findViewById(R.id.someTextView1)).setText(String.valueOf(timer.isRunning()));
+        }
+        else if (readFromPref() == "")
+        {
+            Log.e("Timer Singleton", "DeviceName is empty, timer.start is canceled");
         }
         else {
             Log.e("TIMER SINGLETON", "TIMER IS ALREADY RUNNING!!!");
@@ -97,6 +94,10 @@ public class TestActivity2 extends Activity {
             Log.e("ERROR", e.toString());
         }*/
 
+    }
+
+    public static Context getContext() {
+        return mContext;
     }
 
     @Override

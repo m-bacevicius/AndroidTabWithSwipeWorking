@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
@@ -58,6 +59,9 @@ public class CpuFragment2 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.cpu_fragment2, container, false);
+
+        Log.e("onCreate", "ONCREATE");
+
         mSeriesCpuCoreTemp = new ArrayList<LineGraphSeries<DataPoint>>();
         mSeriesCpuCoreLoad = new ArrayList<LineGraphSeries<DataPoint>>();
         mSeriesCpuCoreClock = new ArrayList<LineGraphSeries<DataPoint>>();
@@ -106,6 +110,7 @@ public class CpuFragment2 extends Fragment {
         GraphView graph2 = (GraphView) view.findViewById(R.id.graph2);
         graph2.getViewport().setXAxisBoundsManual(true);
         graph2.getViewport().setMaxX(40);
+        graph2.getViewport().setMaxY(100);
         for (int x = 0; x < NumberOfCores; x++) {
             Random rnd = new Random();
             int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
@@ -130,18 +135,20 @@ public class CpuFragment2 extends Fragment {
             graph3.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
             graph3.addSeries(mSeriesCpuCoreClock.get(x));
         }
-
-
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.e("onResume", "ONRESUME");
+
+        //mHandler.removeCallbacks(mTimer1);
         mTimer1 = new Runnable() {
             @Override
             public void run() {
                 try {
+                    Log.d("mTimer1", String.valueOf(graphLastXValue));
                     getGrpcData(DeviceName);
                     graphLastXValue += 1d;
                     for (int x = 0; x < CoreTemp.length; x++) {
@@ -156,6 +163,7 @@ public class CpuFragment2 extends Fragment {
         };
         mHandler.postDelayed(mTimer1, 1000);
 
+        //mHandler.removeCallbacks(mTimer2);
         mTimer2 = new Runnable() {
             @Override
             public void run() {
@@ -171,6 +179,7 @@ public class CpuFragment2 extends Fragment {
         };
         mHandler.postDelayed(mTimer2, 1000);
 
+        //mHandler.removeCallbacks(mTimer3);
         mTimer3 = new Runnable() {
             @Override
             public void run() {
@@ -188,12 +197,44 @@ public class CpuFragment2 extends Fragment {
         mHandler.postDelayed(mTimer3, 1000);
     }
 
+    /*CountDownTimer timer3 = new CountDownTimer(300000, 1000) { // adjust the milli seconds here         this is working;
+
+        public void onTick(long millisUntilFinished) {
+            //Log.e("TIMER", "IS WORKING");
+            try {
+                Log.d("mTimer1", String.valueOf(graphLastXValue));
+                getGrpcData(DeviceName);
+                graphLastXValue += 1d;
+                for (int x = 0; x < CoreTemp.length; x++) {
+                    mSeriesCpuCoreTemp.get(x).appendData(new DataPoint(graphLastXValue, Double.valueOf(CoreTemp[x])), true, 40);
+                }
+            } catch (Exception e) {
+                Log.e("found the exception", e.toString());
+            }
+        }
+        public void onFinish() {
+            timer3.start();
+        }
+    };*/
+
     @Override
     public void onPause() {
         mHandler.removeCallbacks(mTimer1);
         mHandler.removeCallbacks(mTimer2);
         mHandler.removeCallbacks(mTimer3);
+        //mTimer1.run();
+        //mTimer2.run();
+        //mTimer3.run();
+        Log.e("onPause", "ONPAUSE");
         super.onPause();
+    }
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        mHandler.removeCallbacks(mTimer1);
+        mHandler.removeCallbacks(mTimer2);
+        mHandler.removeCallbacks(mTimer3);
     }
 
     public void getGrpcData() throws InterruptedException {
