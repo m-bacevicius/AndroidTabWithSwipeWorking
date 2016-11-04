@@ -93,7 +93,7 @@ public class ChartTest extends Activity {
             // Do whatever you need with the string, you can update your UI from here
             entries = fillUpTheDataSeries(result);
             Log.d("onPostExecute", "Filling up data");
-            LineDataSet dataSet = new LineDataSet(entries, "Cpu package temp"); // add entries to dataset
+            LineDataSet dataSet = new LineDataSet(entries, "CPU package temperature"); // add entries to dataset
             dataSet.setColor(Color.BLUE);
             dataSet.setDrawCircles(false);
             dataSet.setFillColor(Color.BLUE);

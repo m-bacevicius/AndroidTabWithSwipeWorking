@@ -1,10 +1,12 @@
 package inducesmile.com.androidtabwithswipe;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -42,14 +44,17 @@ public class TimerSingleton {
             ComputerOuterClass.Computer response = stub.getRealtimeComputerWithName(ComputerOuterClass.ComputerName.newBuilder().setName(readFromPref(TestActivity2.getContext())).build());
             try
             {
-                if (Integer.valueOf(response.getCpuPackageLoad()) >= 50)
+                if (Integer.valueOf(response.getCpuPackageLoad()) >= 50 && counter >= 600)
                 {
                     Log.e("Timer", "CPU is heavily loaded");
                     getNotification2(TestActivity2.getContext(), "Heavy load for CPU has been detected");
+                    counter = 0;
                 }
                 else
                 {
                     Log.d("Timer gRPC", response.getCpuPackageLoad());
+                    Log.e("Timer counter", String.valueOf(counter));
+                    counter++;
                 }
             }
             catch (Exception e)
@@ -74,31 +79,42 @@ public class TimerSingleton {
     public static void getNotification2(Context context, String content) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder
-                .setContentTitle("Content Title")
+                //.setPriority(Notification.PRIORITY_MAX)
+                .setColor(Color.RED)
+                .setWhen(System.currentTimeMillis())
+                .setAutoCancel(true)
+
+                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND | Notification.FLAG_SHOW_LIGHTS)
+                //.setDefaults(Notification.FLAG_SHOW_LIGHTS)
+                .setLights(Color.MAGENTA, 100, 100)
+                .setContentTitle("Be advised")
                 .setContentText(content)
+                //.setOngoing(false)
                 .setSmallIcon(R.drawable.temperature)
+
         //.setStyle(new NotificationCompat.BigTextStyle())
         ;
         // Setting notification style
-        Intent intent = new Intent();
-
+        Intent intent = new Intent(context, TestActivity2.class);       //TODO was () instead of context, TestActivity2.class
+                                                                        //TODO look for a better result
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, 0);
         builder.setContentIntent(contentIntent);
 
         Intent realtimeIntent = new Intent(context, MainActivity.class);
         PendingIntent realtime = PendingIntent.getActivity(context, 0, realtimeIntent, 0);
-        builder.addAction(R.mipmap.ic_flash, "SEE REALTIME", realtime);
+        builder.addAction(R.mipmap.ic_flash, "REALTIME", realtime);
 
         Intent chartIntent = new Intent(context, ChartTest.class);
         PendingIntent chartPendlingIntent = PendingIntent.getActivity(context, 0, chartIntent, 0);
-        builder.addAction(R.mipmap.ic_chart, "SEE CHART", chartPendlingIntent);
+        builder.addAction(R.mipmap.ic_chart, "LAST 24H", chartPendlingIntent);
 
         Notification notification = builder.build();
         NotificationManagerCompat.from(context).notify(0, notification);
     }
 
     static boolean isRunning = false;
+    static long counter = 601;
 
     protected void start()
     {

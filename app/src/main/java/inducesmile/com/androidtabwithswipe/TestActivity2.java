@@ -7,7 +7,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -70,6 +72,7 @@ public class TestActivity2 extends Activity {
         ((Button) findViewById(R.id.button3)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 getNotification2();
+                //redFlashLight();          //TODO WORKS!!!
                 timer.stop();
                 ((TextView)findViewById(R.id.someTextView1)).setText(String.valueOf(timer.isRunning()));
             }
@@ -109,6 +112,12 @@ public class TestActivity2 extends Activity {
     public void getNotification2() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder
+                .setPriority(Notification.PRIORITY_MAX)
+                .setColor(Color.RED)
+                .setWhen(System.currentTimeMillis())
+                //.setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND | Notification.FLAG_SHOW_LIGHTS)
+                .setLights(Color.MAGENTA, 100, 100)
                 .setContentTitle("Content Title")
                 .setContentText("This is a content test")
                 .setSmallIcon(R.drawable.temperature)
@@ -123,15 +132,27 @@ public class TestActivity2 extends Activity {
 
         Intent realtimeIntent = new Intent(getApplicationContext(), MainActivity.class);
         PendingIntent realtime = PendingIntent.getActivity(this, 0, realtimeIntent, 0);
-        builder.addAction(R.mipmap.ic_flash, "SEE REALTIME", realtime);
+        builder.addAction(R.mipmap.ic_flash, "REALTIME", realtime);
 
         Intent chartIntent = new Intent(getApplicationContext(), ChartTest.class);
         PendingIntent chartPendlingIntent = PendingIntent.getActivity(this, 0, chartIntent, 0);
-        builder.addAction(R.mipmap.ic_chart, "SEE CHART", chartPendlingIntent);
+        builder.addAction(R.mipmap.ic_chart, "LAST 24H", chartPendlingIntent);
 
         Notification notification = builder.build();
         NotificationManagerCompat.from(this).notify(0, notification);
     }
+
+    private void RedFlashLight()
+    {
+        NotificationManager nm = ( NotificationManager ) getSystemService( NOTIFICATION_SERVICE );
+        Notification notif = new Notification();
+        notif.ledARGB = 0xFFff0000;
+        notif.flags = Notification.FLAG_SHOW_LIGHTS;
+        notif.ledOnMS = 100;
+        notif.ledOffMS = 100;
+        nm.notify(1234, notif);
+    }
+
 
     public void getNotification() {
         Intent intent = new Intent();
@@ -147,6 +168,26 @@ public class TestActivity2 extends Activity {
         notification.flags = Notification.FLAG_AUTO_CANCEL;
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(0, notification);
+    }
+
+    void redFlashLight() {
+        Notification.Builder builder = new Notification.Builder(getContext());
+        Intent intent = new Intent();
+        PendingIntent pIntent = PendingIntent.getActivity(TestActivity2.this, 0, intent, 0);
+        builder.setContentIntent(pIntent)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setTicker("My Ticker")
+                .setWhen(System.currentTimeMillis())
+                //.setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND | Notification.FLAG_SHOW_LIGHTS)
+                .setLights(Color.MAGENTA, 300, 100)
+                .setContentTitle("My Title 1")
+                .setContentText("My Text 1");
+        Notification notification = builder.getNotification();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notification);
+
+
     }
 
     String doRead() {
