@@ -110,16 +110,6 @@ public class ChartTest extends Activity {
         }
     }
 
-    /*protected void startTestThread() {
-        Thread t = new Thread() {
-            public void run() {
-
-                entries = fillUpTheDataSeries(getMap());
-            }
-        };
-        t.start();
-    }*/
-
     private Map<Integer, ComputerOuterClass.Computer> getMap() {
         ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43432)
                 .usePlaintext(true)

@@ -3,6 +3,7 @@
     <string name="title_section1">CPU</string>
     <string name="title_section2">GPU</string>
     <string name="title_section3">Rap</string>
+    <string name="title_section4">RAM</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="PrefSettings">Hello blank fragment</string>

@@ -148,7 +148,6 @@ public class CpuFragment2 extends Fragment {
         Log.e("onResume", "ONRESUME");
         timer.stop();
 
-        //mHandler.removeCallbacks(mTimer1);
         mTimer1 = new Runnable() {
             @Override
             public void run() {
@@ -168,7 +167,6 @@ public class CpuFragment2 extends Fragment {
         };
         mHandler.postDelayed(mTimer1, 1000);
 
-        //mHandler.removeCallbacks(mTimer2);
         mTimer2 = new Runnable() {
             @Override
             public void run() {
@@ -184,7 +182,6 @@ public class CpuFragment2 extends Fragment {
         };
         mHandler.postDelayed(mTimer2, 1000);
 
-        //mHandler.removeCallbacks(mTimer3);
         mTimer3 = new Runnable() {
             @Override
             public void run() {
@@ -204,13 +201,10 @@ public class CpuFragment2 extends Fragment {
 
     @Override
     public void onPause() {
-        timer.start();
+        //timer.start();
         mHandler.removeCallbacks(mTimer1);
         mHandler.removeCallbacks(mTimer2);
         mHandler.removeCallbacks(mTimer3);
-        //mTimer1.run();
-        //mTimer2.run();
-        //mTimer3.run();
         Log.e("onPause", "ONPAUSE");
         super.onPause();
     }

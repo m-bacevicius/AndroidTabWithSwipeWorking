@@ -42,7 +42,7 @@ public class TestActivity2 extends Activity {
 
         mContext = getApplicationContext();
 
-        if (!timer.isRunning() && readFromPref() != "")
+        /*if (!timer.isRunning() && readFromPref() != "")
         {
             timer.start();
             ((TextView)findViewById(R.id.someTextView1)).setText(String.valueOf(timer.isRunning()));
@@ -54,7 +54,7 @@ public class TestActivity2 extends Activity {
         else {
             Log.e("TIMER SINGLETON", "TIMER IS ALREADY RUNNING!!!");
             ((TextView)findViewById(R.id.someTextView1)).setText(String.valueOf(timer.isRunning()));
-        }
+        }*/
         Log.e("Timer", "onCreate");
         ((TextView) findViewById(R.id.testTextView)).setText(readFromPref());
 
