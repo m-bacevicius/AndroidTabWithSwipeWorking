@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -15,6 +17,9 @@ import android.util.Log;
 
 import com.example.ComputerOuterClass;
 import com.example.computerServiceGrpc;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -32,9 +37,9 @@ public class TimerSingleton {
     private TimerSingleton() {
     }
 
-    static CountDownTimer timer3 = new CountDownTimer(1000, 1000) { // adjust the milli seconds here         this is working;
-
-        public void onTick(long millisUntilFinished) {
+    private Handler handler = new Handler();
+    private Runnable runnable = new Runnable() {
+        public void run() {
             Log.e("TIMER", "IS WORKING");
             ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43431)
                     .usePlaintext(true)
@@ -47,7 +52,7 @@ public class TimerSingleton {
                 if (Integer.valueOf(response.getCpuPackageLoad()) >= 50 && counter >= 600)
                 {
                     Log.e("Timer", "CPU is heavily loaded");
-                    getNotification2(TestActivity2.getContext(), "Heavy load for CPU has been detected");
+                    getNotification2(TestActivity2.getContext(), "Heavy load for CPU has been detected: " + response.getCpuPackageLoad());
                     counter = 0;
                 }
                 else
@@ -59,16 +64,22 @@ public class TimerSingleton {
             }
             catch (Exception e)
             {
-                timer3.cancel();
+                stopTimer();
+                //timer3.cancel();
                 Log.e("", e.toString());
             }
-
-        }
-
-        public void onFinish() {
-            timer3.start();
+            handler.postDelayed(this, 10000);
         }
     };
+
+    private void startTimer()
+    {
+        runnable.run();
+    }
+    private void stopTimer()
+    {
+        handler.removeCallbacks(runnable);
+    }
 
     private static String readFromPref(Context context) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -118,19 +129,53 @@ public class TimerSingleton {
 
     protected void start()
     {
-        timer3.start();
+        startTimer();
+        //timer3.start();
         isRunning = true;
         Log.d("Timer Singleton", "Timer has started");
 
     }
     protected void stop()
     {
-        timer3.cancel();
+        stopTimer();
+        //timer3.cancel();
         isRunning = false;
         Log.d("Timer Singleton", "Timer has stopped");
     }
     protected boolean isRunning()
     {
         return isRunning;
+    }
+
+    private void doGrpc()
+    {
+        Log.e("TIMER", "IS WORKING");
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43431)
+                .usePlaintext(true)
+                .build();
+        //ComputerOuterClass.ComputerName request = ComputerOuterClass.ComputerName.newBuilder().setName(name).build();
+        computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);
+        ComputerOuterClass.Computer response = stub.getRealtimeComputerWithName(ComputerOuterClass.ComputerName.newBuilder().setName(readFromPref(TestActivity2.getContext())).build());
+        try
+        {
+            if (Integer.valueOf(response.getCpuPackageLoad()) >= 50 && counter >= 600)
+            {
+                Log.e("Timer", "CPU is heavily loaded");
+                getNotification2(TestActivity2.getContext(), "Heavy load for CPU has been detected: " + response.getCpuPackageLoad());
+                counter = 0;
+            }
+            else
+            {
+                Log.d("Timer gRPC", response.getCpuPackageLoad());
+                Log.e("Timer counter", String.valueOf(counter));
+                counter++;
+            }
+        }
+        catch (Exception e)
+        {
+            stopTimer();
+            //timer3.cancel();
+            Log.e("", e.toString());
+        }
     }
 }

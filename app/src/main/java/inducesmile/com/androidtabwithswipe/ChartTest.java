@@ -9,9 +9,11 @@ import android.app.ProgressDialog;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -101,7 +103,7 @@ public class ChartTest extends Activity {
 
             LineData lineData = new LineData(dataSet);
             //chart.animateY(3000);
-            chart.animateX(3000, Easing.EasingOption.EaseInOutSine);
+            //chart.animateX(3000, Easing.EasingOption.EaseInOutSine);
             chart.setData(lineData);
             chart.invalidate(); // refresh
             dialog.hide();
@@ -118,23 +120,12 @@ public class ChartTest extends Activity {
         t.start();
     }*/
 
-    public void setAlarm(View view)
-    {
-        long alertTime = System.nanoTime()+1*1000;
-
-        Intent alertIntent = new Intent(this, AlertReceiver.class);
-
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alertTime, PendingIntent.getBroadcast(this, 1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-    }
-
     private Map<Integer, ComputerOuterClass.Computer> getMap() {
         ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43432)
                 .usePlaintext(true)
                 .build();
         computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);
-        ComputerOuterClass.ComputerListResponse response = stub.getComputerList(ComputerOuterClass.Empty.newBuilder().build());
+        ComputerOuterClass.ComputerListResponse response = stub.getComputerListWithName(ComputerOuterClass.ComputerName.newBuilder().setName(readFromPref()).build());
        // System.out.print(response + "The count " + response.getComputerListCount() + '\n');
         Map<Integer, ComputerOuterClass.Computer> map = response.getComputerListMap();
         return map;
@@ -168,5 +159,10 @@ public class ChartTest extends Activity {
             entries.add(new Entry(counter, (int) temp));
         }
         return entries;
+    }
+    private String readFromPref() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        String name = settings.getString("name", "");
+        return name;
     }
 }

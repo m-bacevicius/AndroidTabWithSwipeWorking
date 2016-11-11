@@ -28,6 +28,15 @@ public class computerServiceGrpc {
 
   // Static method descriptors that strictly reflect the proto.
   @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
+  public static final io.grpc.MethodDescriptor<ComputerOuterClass.ComputerName,
+      ComputerOuterClass.ComputerListResponse> METHOD_GET_COMPUTER_LIST_WITH_NAME =
+      io.grpc.MethodDescriptor.create(
+          io.grpc.MethodDescriptor.MethodType.UNARY,
+          generateFullMethodName(
+              "computerService", "GetComputerListWithName"),
+          io.grpc.protobuf.lite.ProtoLiteUtils.marshaller(ComputerOuterClass.ComputerName.getDefaultInstance()),
+          io.grpc.protobuf.lite.ProtoLiteUtils.marshaller(ComputerOuterClass.ComputerListResponse.getDefaultInstance()));
+  @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
   public static final io.grpc.MethodDescriptor<ComputerOuterClass.Empty,
       ComputerOuterClass.ComputerListResponse> METHOD_GET_COMPUTER_LIST =
       io.grpc.MethodDescriptor.create(
@@ -84,6 +93,13 @@ public class computerServiceGrpc {
 
     /**
      */
+    public void getComputerListWithName(ComputerOuterClass.ComputerName request,
+        io.grpc.stub.StreamObserver<ComputerOuterClass.ComputerListResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(METHOD_GET_COMPUTER_LIST_WITH_NAME, responseObserver);
+    }
+
+    /**
+     */
     public void getComputerList(ComputerOuterClass.Empty request,
         io.grpc.stub.StreamObserver<ComputerOuterClass.ComputerListResponse> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_GET_COMPUTER_LIST, responseObserver);
@@ -108,6 +124,13 @@ public class computerServiceGrpc {
 
     @Override public io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
+          .addMethod(
+            METHOD_GET_COMPUTER_LIST_WITH_NAME,
+            asyncUnaryCall(
+              new MethodHandlers<
+                ComputerOuterClass.ComputerName,
+                ComputerOuterClass.ComputerListResponse>(
+                  this, METHODID_GET_COMPUTER_LIST_WITH_NAME)))
           .addMethod(
             METHOD_GET_COMPUTER_LIST,
             asyncUnaryCall(
@@ -149,6 +172,14 @@ public class computerServiceGrpc {
     protected computerServiceStub build(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
       return new computerServiceStub(channel, callOptions);
+    }
+
+    /**
+     */
+    public void getComputerListWithName(ComputerOuterClass.ComputerName request,
+        io.grpc.stub.StreamObserver<ComputerOuterClass.ComputerListResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(METHOD_GET_COMPUTER_LIST_WITH_NAME, getCallOptions()), request, responseObserver);
     }
 
     /**
@@ -199,6 +230,13 @@ public class computerServiceGrpc {
 
     /**
      */
+    public ComputerOuterClass.ComputerListResponse getComputerListWithName(ComputerOuterClass.ComputerName request) {
+      return blockingUnaryCall(
+          getChannel(), METHOD_GET_COMPUTER_LIST_WITH_NAME, getCallOptions(), request);
+    }
+
+    /**
+     */
     public ComputerOuterClass.ComputerListResponse getComputerList(ComputerOuterClass.Empty request) {
       return blockingUnaryCall(
           getChannel(), METHOD_GET_COMPUTER_LIST, getCallOptions(), request);
@@ -242,6 +280,14 @@ public class computerServiceGrpc {
 
     /**
      */
+    public com.google.common.util.concurrent.ListenableFuture<ComputerOuterClass.ComputerListResponse> getComputerListWithName(
+        ComputerOuterClass.ComputerName request) {
+      return futureUnaryCall(
+          getChannel().newCall(METHOD_GET_COMPUTER_LIST_WITH_NAME, getCallOptions()), request);
+    }
+
+    /**
+     */
     public com.google.common.util.concurrent.ListenableFuture<ComputerOuterClass.ComputerListResponse> getComputerList(
         ComputerOuterClass.Empty request) {
       return futureUnaryCall(
@@ -268,9 +314,10 @@ public class computerServiceGrpc {
     }
   }
 
-  private static final int METHODID_GET_COMPUTER_LIST = 0;
-  private static final int METHODID_GET_REALTIME_COMPUTER = 1;
-  private static final int METHODID_GET_REALTIME_COMPUTER_WITH_NAME = 2;
+  private static final int METHODID_GET_COMPUTER_LIST_WITH_NAME = 0;
+  private static final int METHODID_GET_COMPUTER_LIST = 1;
+  private static final int METHODID_GET_REALTIME_COMPUTER = 2;
+  private static final int METHODID_GET_REALTIME_COMPUTER_WITH_NAME = 3;
 
   private static class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -289,6 +336,10 @@ public class computerServiceGrpc {
     @SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
+        case METHODID_GET_COMPUTER_LIST_WITH_NAME:
+          serviceImpl.getComputerListWithName((ComputerOuterClass.ComputerName) request,
+              (io.grpc.stub.StreamObserver<ComputerOuterClass.ComputerListResponse>) responseObserver);
+          break;
         case METHODID_GET_COMPUTER_LIST:
           serviceImpl.getComputerList((ComputerOuterClass.Empty) request,
               (io.grpc.stub.StreamObserver<ComputerOuterClass.ComputerListResponse>) responseObserver);
@@ -319,6 +370,7 @@ public class computerServiceGrpc {
 
   public static io.grpc.ServiceDescriptor getServiceDescriptor() {
     return new io.grpc.ServiceDescriptor(SERVICE_NAME,
+        METHOD_GET_COMPUTER_LIST_WITH_NAME,
         METHOD_GET_COMPUTER_LIST,
         METHOD_GET_REALTIME_COMPUTER,
         METHOD_GET_REALTIME_COMPUTER_WITH_NAME);

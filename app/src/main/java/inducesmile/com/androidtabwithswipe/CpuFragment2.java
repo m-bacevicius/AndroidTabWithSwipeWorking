@@ -3,6 +3,7 @@ package inducesmile.com.androidtabwithswipe;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -39,6 +40,8 @@ public class CpuFragment2 extends Fragment {
 
     public CpuFragment2() {
     }
+
+    TimerSingleton timer = TimerSingleton.getInstance();
 
     private final Handler mHandler = new Handler();
     private Runnable mTimer1;
@@ -135,6 +138,7 @@ public class CpuFragment2 extends Fragment {
             graph3.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
             graph3.addSeries(mSeriesCpuCoreClock.get(x));
         }
+
         return view;
     }
 
@@ -142,6 +146,7 @@ public class CpuFragment2 extends Fragment {
     public void onResume() {
         super.onResume();
         Log.e("onResume", "ONRESUME");
+        timer.stop();
 
         //mHandler.removeCallbacks(mTimer1);
         mTimer1 = new Runnable() {
@@ -197,28 +202,9 @@ public class CpuFragment2 extends Fragment {
         mHandler.postDelayed(mTimer3, 1000);
     }
 
-    /*CountDownTimer timer3 = new CountDownTimer(300000, 1000) { // adjust the milli seconds here         this is working;
-
-        public void onTick(long millisUntilFinished) {
-            //Log.e("TIMER", "IS WORKING");
-            try {
-                Log.d("mTimer1", String.valueOf(graphLastXValue));
-                getGrpcData(DeviceName);
-                graphLastXValue += 1d;
-                for (int x = 0; x < CoreTemp.length; x++) {
-                    mSeriesCpuCoreTemp.get(x).appendData(new DataPoint(graphLastXValue, Double.valueOf(CoreTemp[x])), true, 40);
-                }
-            } catch (Exception e) {
-                Log.e("found the exception", e.toString());
-            }
-        }
-        public void onFinish() {
-            timer3.start();
-        }
-    };*/
-
     @Override
     public void onPause() {
+        timer.start();
         mHandler.removeCallbacks(mTimer1);
         mHandler.removeCallbacks(mTimer2);
         mHandler.removeCallbacks(mTimer3);
@@ -250,7 +236,7 @@ public class CpuFragment2 extends Fragment {
         NumberOfCores = CoreClock.length;
     }
 
-    public void getGrpcData(String name) throws InterruptedException {
+    public ComputerOuterClass.Computer getGrpcData (String name) throws InterruptedException {
         ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43431)
                 .usePlaintext(true)
                 .build();
@@ -261,6 +247,7 @@ public class CpuFragment2 extends Fragment {
         CoreLoad = response.getCpuCoreLoad().split(" ");
         CoreTemp = response.getCpuCoreTemp().split(" ");
         NumberOfCores = CoreClock.length;
+        return response;
 
         /*ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43431)
                 .usePlaintext(true)

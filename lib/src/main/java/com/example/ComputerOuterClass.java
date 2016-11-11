@@ -115,6 +115,56 @@ public final class ComputerOuterClass {
      */
     com.google.protobuf.ByteString
         getDateBytes();
+
+    /**
+     * <code>optional string FreeRam = 11;</code>
+     */
+    String getFreeRam();
+    /**
+     * <code>optional string FreeRam = 11;</code>
+     */
+    com.google.protobuf.ByteString
+        getFreeRamBytes();
+
+    /**
+     * <code>optional string UsedRam = 12;</code>
+     */
+    String getUsedRam();
+    /**
+     * <code>optional string UsedRam = 12;</code>
+     */
+    com.google.protobuf.ByteString
+        getUsedRamBytes();
+
+    /**
+     * <code>optional string LoadRam = 13;</code>
+     */
+    String getLoadRam();
+    /**
+     * <code>optional string LoadRam = 13;</code>
+     */
+    com.google.protobuf.ByteString
+        getLoadRamBytes();
+
+    /**
+     * <code>optional string HddLoad = 14;</code>
+     */
+    String getHddLoad();
+    /**
+     * <code>optional string HddLoad = 14;</code>
+     */
+    com.google.protobuf.ByteString
+        getHddLoadBytes();
+
+    /**
+     * <code>optional string HddTemp = 15;</code>
+     */
+    String getHddTemp();
+    /**
+     * <code>optional string HddTemp = 15;</code>
+     */
+    com.google.protobuf.ByteString
+        getHddTempBytes();
   }
   /**
    * Protobuf type {@code Computer}
@@ -138,6 +188,11 @@ public final class ComputerOuterClass {
       gpuClock_ = "";
       gpuTemp_ = "";
       date_ = "";
+      freeRam_ = "";
+      usedRam_ = "";
+      loadRam_ = "";
+      hddLoad_ = "";
+      hddTemp_ = "";
     }
 
     @Override
@@ -225,6 +280,36 @@ public final class ComputerOuterClass {
               date_ = s;
               break;
             }
+            case 90: {
+              String s = input.readStringRequireUtf8();
+
+              freeRam_ = s;
+              break;
+            }
+            case 98: {
+              String s = input.readStringRequireUtf8();
+
+              usedRam_ = s;
+              break;
+            }
+            case 106: {
+              String s = input.readStringRequireUtf8();
+
+              loadRam_ = s;
+              break;
+            }
+            case 114: {
+              String s = input.readStringRequireUtf8();
+
+              hddLoad_ = s;
+              break;
+            }
+            case 122: {
+              String s = input.readStringRequireUtf8();
+
+              hddTemp_ = s;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -241,7 +326,7 @@ public final class ComputerOuterClass {
       return ComputerOuterClass.internal_static_Computer_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
       return ComputerOuterClass.internal_static_Computer_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
@@ -588,6 +673,176 @@ public final class ComputerOuterClass {
       }
     }
 
+    public static final int FREERAM_FIELD_NUMBER = 11;
+    private volatile Object freeRam_;
+    /**
+     * <code>optional string FreeRam = 11;</code>
+     */
+    public String getFreeRam() {
+      Object ref = freeRam_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        freeRam_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>optional string FreeRam = 11;</code>
+     */
+    public com.google.protobuf.ByteString
+        getFreeRamBytes() {
+      Object ref = freeRam_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        freeRam_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int USEDRAM_FIELD_NUMBER = 12;
+    private volatile Object usedRam_;
+    /**
+     * <code>optional string UsedRam = 12;</code>
+     */
+    public String getUsedRam() {
+      Object ref = usedRam_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        usedRam_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>optional string UsedRam = 12;</code>
+     */
+    public com.google.protobuf.ByteString
+        getUsedRamBytes() {
+      Object ref = usedRam_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        usedRam_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int LOADRAM_FIELD_NUMBER = 13;
+    private volatile Object loadRam_;
+    /**
+     * <code>optional string LoadRam = 13;</code>
+     */
+    public String getLoadRam() {
+      Object ref = loadRam_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        loadRam_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>optional string LoadRam = 13;</code>
+     */
+    public com.google.protobuf.ByteString
+        getLoadRamBytes() {
+      Object ref = loadRam_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        loadRam_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int HDDLOAD_FIELD_NUMBER = 14;
+    private volatile Object hddLoad_;
+    /**
+     * <code>optional string HddLoad = 14;</code>
+     */
+    public String getHddLoad() {
+      Object ref = hddLoad_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        hddLoad_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>optional string HddLoad = 14;</code>
+     */
+    public com.google.protobuf.ByteString
+        getHddLoadBytes() {
+      Object ref = hddLoad_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        hddLoad_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int HDDTEMP_FIELD_NUMBER = 15;
+    private volatile Object hddTemp_;
+    /**
+     * <code>optional string HddTemp = 15;</code>
+     */
+    public String getHddTemp() {
+      Object ref = hddTemp_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        hddTemp_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>optional string HddTemp = 15;</code>
+     */
+    public com.google.protobuf.ByteString
+        getHddTempBytes() {
+      Object ref = hddTemp_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        hddTemp_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -630,6 +885,21 @@ public final class ComputerOuterClass {
       if (!getDateBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 10, date_);
       }
+      if (!getFreeRamBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 11, freeRam_);
+      }
+      if (!getUsedRamBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 12, usedRam_);
+      }
+      if (!getLoadRamBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 13, loadRam_);
+      }
+      if (!getHddLoadBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 14, hddLoad_);
+      }
+      if (!getHddTempBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 15, hddTemp_);
+      }
     }
 
     public int getSerializedSize() {
@@ -667,6 +937,21 @@ public final class ComputerOuterClass {
       if (!getDateBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, date_);
       }
+      if (!getFreeRamBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, freeRam_);
+      }
+      if (!getUsedRamBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, usedRam_);
+      }
+      if (!getLoadRamBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(13, loadRam_);
+      }
+      if (!getHddLoadBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(14, hddLoad_);
+      }
+      if (!getHddTempBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(15, hddTemp_);
+      }
       memoizedSize = size;
       return size;
     }
@@ -703,6 +988,16 @@ public final class ComputerOuterClass {
           .equals(other.getGpuTemp());
       result = result && getDate()
           .equals(other.getDate());
+      result = result && getFreeRam()
+          .equals(other.getFreeRam());
+      result = result && getUsedRam()
+          .equals(other.getUsedRam());
+      result = result && getLoadRam()
+          .equals(other.getLoadRam());
+      result = result && getHddLoad()
+          .equals(other.getHddLoad());
+      result = result && getHddTemp()
+          .equals(other.getHddTemp());
       return result;
     }
 
@@ -733,6 +1028,16 @@ public final class ComputerOuterClass {
       hash = (53 * hash) + getGpuTemp().hashCode();
       hash = (37 * hash) + DATE_FIELD_NUMBER;
       hash = (53 * hash) + getDate().hashCode();
+      hash = (37 * hash) + FREERAM_FIELD_NUMBER;
+      hash = (53 * hash) + getFreeRam().hashCode();
+      hash = (37 * hash) + USEDRAM_FIELD_NUMBER;
+      hash = (53 * hash) + getUsedRam().hashCode();
+      hash = (37 * hash) + LOADRAM_FIELD_NUMBER;
+      hash = (53 * hash) + getLoadRam().hashCode();
+      hash = (37 * hash) + HDDLOAD_FIELD_NUMBER;
+      hash = (53 * hash) + getHddLoad().hashCode();
+      hash = (37 * hash) + HDDTEMP_FIELD_NUMBER;
+      hash = (53 * hash) + getHddTemp().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -811,7 +1116,7 @@ public final class ComputerOuterClass {
 
     @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -827,7 +1132,7 @@ public final class ComputerOuterClass {
         return ComputerOuterClass.internal_static_Computer_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
         return ComputerOuterClass.internal_static_Computer_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -840,7 +1145,7 @@ public final class ComputerOuterClass {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -870,6 +1175,16 @@ public final class ComputerOuterClass {
         gpuTemp_ = "";
 
         date_ = "";
+
+        freeRam_ = "";
+
+        usedRam_ = "";
+
+        loadRam_ = "";
+
+        hddLoad_ = "";
+
+        hddTemp_ = "";
 
         return this;
       }
@@ -903,6 +1218,11 @@ public final class ComputerOuterClass {
         result.gpuClock_ = gpuClock_;
         result.gpuTemp_ = gpuTemp_;
         result.date_ = date_;
+        result.freeRam_ = freeRam_;
+        result.usedRam_ = usedRam_;
+        result.loadRam_ = loadRam_;
+        result.hddLoad_ = hddLoad_;
+        result.hddTemp_ = hddTemp_;
         onBuilt();
         return result;
       }
@@ -982,6 +1302,26 @@ public final class ComputerOuterClass {
         }
         if (!other.getDate().isEmpty()) {
           date_ = other.date_;
+          onChanged();
+        }
+        if (!other.getFreeRam().isEmpty()) {
+          freeRam_ = other.freeRam_;
+          onChanged();
+        }
+        if (!other.getUsedRam().isEmpty()) {
+          usedRam_ = other.usedRam_;
+          onChanged();
+        }
+        if (!other.getLoadRam().isEmpty()) {
+          loadRam_ = other.loadRam_;
+          onChanged();
+        }
+        if (!other.getHddLoad().isEmpty()) {
+          hddLoad_ = other.hddLoad_;
+          onChanged();
+        }
+        if (!other.getHddTemp().isEmpty()) {
+          hddTemp_ = other.hddTemp_;
           onChanged();
         }
         onChanged();
@@ -1699,6 +2039,351 @@ public final class ComputerOuterClass {
         onChanged();
         return this;
       }
+
+      private Object freeRam_ = "";
+      /**
+       * <code>optional string FreeRam = 11;</code>
+       */
+      public String getFreeRam() {
+        Object ref = freeRam_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          freeRam_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>optional string FreeRam = 11;</code>
+       */
+      public com.google.protobuf.ByteString
+          getFreeRamBytes() {
+        Object ref = freeRam_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          freeRam_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string FreeRam = 11;</code>
+       */
+      public Builder setFreeRam(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        freeRam_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string FreeRam = 11;</code>
+       */
+      public Builder clearFreeRam() {
+        
+        freeRam_ = getDefaultInstance().getFreeRam();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string FreeRam = 11;</code>
+       */
+      public Builder setFreeRamBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        freeRam_ = value;
+        onChanged();
+        return this;
+      }
+
+      private Object usedRam_ = "";
+      /**
+       * <code>optional string UsedRam = 12;</code>
+       */
+      public String getUsedRam() {
+        Object ref = usedRam_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          usedRam_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>optional string UsedRam = 12;</code>
+       */
+      public com.google.protobuf.ByteString
+          getUsedRamBytes() {
+        Object ref = usedRam_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          usedRam_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string UsedRam = 12;</code>
+       */
+      public Builder setUsedRam(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        usedRam_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string UsedRam = 12;</code>
+       */
+      public Builder clearUsedRam() {
+        
+        usedRam_ = getDefaultInstance().getUsedRam();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string UsedRam = 12;</code>
+       */
+      public Builder setUsedRamBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        usedRam_ = value;
+        onChanged();
+        return this;
+      }
+
+      private Object loadRam_ = "";
+      /**
+       * <code>optional string LoadRam = 13;</code>
+       */
+      public String getLoadRam() {
+        Object ref = loadRam_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          loadRam_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>optional string LoadRam = 13;</code>
+       */
+      public com.google.protobuf.ByteString
+          getLoadRamBytes() {
+        Object ref = loadRam_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          loadRam_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string LoadRam = 13;</code>
+       */
+      public Builder setLoadRam(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        loadRam_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string LoadRam = 13;</code>
+       */
+      public Builder clearLoadRam() {
+        
+        loadRam_ = getDefaultInstance().getLoadRam();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string LoadRam = 13;</code>
+       */
+      public Builder setLoadRamBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        loadRam_ = value;
+        onChanged();
+        return this;
+      }
+
+      private Object hddLoad_ = "";
+      /**
+       * <code>optional string HddLoad = 14;</code>
+       */
+      public String getHddLoad() {
+        Object ref = hddLoad_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          hddLoad_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>optional string HddLoad = 14;</code>
+       */
+      public com.google.protobuf.ByteString
+          getHddLoadBytes() {
+        Object ref = hddLoad_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          hddLoad_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string HddLoad = 14;</code>
+       */
+      public Builder setHddLoad(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        hddLoad_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string HddLoad = 14;</code>
+       */
+      public Builder clearHddLoad() {
+        
+        hddLoad_ = getDefaultInstance().getHddLoad();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string HddLoad = 14;</code>
+       */
+      public Builder setHddLoadBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        hddLoad_ = value;
+        onChanged();
+        return this;
+      }
+
+      private Object hddTemp_ = "";
+      /**
+       * <code>optional string HddTemp = 15;</code>
+       */
+      public String getHddTemp() {
+        Object ref = hddTemp_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          hddTemp_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>optional string HddTemp = 15;</code>
+       */
+      public com.google.protobuf.ByteString
+          getHddTempBytes() {
+        Object ref = hddTemp_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          hddTemp_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string HddTemp = 15;</code>
+       */
+      public Builder setHddTemp(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        hddTemp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string HddTemp = 15;</code>
+       */
+      public Builder clearHddTemp() {
+        
+        hddTemp_ = getDefaultInstance().getHddTemp();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string HddTemp = 15;</code>
+       */
+      public Builder setHddTempBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        hddTemp_ = value;
+        onChanged();
+        return this;
+      }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -1864,7 +2549,7 @@ public final class ComputerOuterClass {
               "Invalid map field number: " + number);
       }
     }
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
       return ComputerOuterClass.internal_static_ComputerListResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
@@ -2095,7 +2780,7 @@ public final class ComputerOuterClass {
 
     @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -2133,7 +2818,7 @@ public final class ComputerOuterClass {
                 "Invalid map field number: " + number);
         }
       }
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
         return ComputerOuterClass.internal_static_ComputerListResponse_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -2146,7 +2831,7 @@ public final class ComputerOuterClass {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -2516,7 +3201,7 @@ public final class ComputerOuterClass {
       return ComputerOuterClass.internal_static_ComputerArrayResponse_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
       return ComputerOuterClass.internal_static_ComputerArrayResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
@@ -2694,7 +3379,7 @@ public final class ComputerOuterClass {
 
     @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -2710,7 +3395,7 @@ public final class ComputerOuterClass {
         return ComputerOuterClass.internal_static_ComputerArrayResponse_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
         return ComputerOuterClass.internal_static_ComputerArrayResponse_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -2723,7 +3408,7 @@ public final class ComputerOuterClass {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -3231,7 +3916,7 @@ public final class ComputerOuterClass {
       return ComputerOuterClass.internal_static_ComputerName_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
       return ComputerOuterClass.internal_static_ComputerName_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
@@ -3405,7 +4090,7 @@ public final class ComputerOuterClass {
 
     @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -3421,7 +4106,7 @@ public final class ComputerOuterClass {
         return ComputerOuterClass.internal_static_ComputerName_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
         return ComputerOuterClass.internal_static_ComputerName_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -3434,7 +4119,7 @@ public final class ComputerOuterClass {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -3716,7 +4401,7 @@ public final class ComputerOuterClass {
       return ComputerOuterClass.internal_static_Empty_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
       return ComputerOuterClass.internal_static_Empty_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
@@ -3846,7 +4531,7 @@ public final class ComputerOuterClass {
 
     @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -3862,7 +4547,7 @@ public final class ComputerOuterClass {
         return ComputerOuterClass.internal_static_Empty_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
         return ComputerOuterClass.internal_static_Empty_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -3875,7 +4560,7 @@ public final class ComputerOuterClass {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -4062,23 +4747,27 @@ public final class ComputerOuterClass {
       descriptor;
   static {
     String[] descriptorData = {
-      "\n\016computer.proto\"\325\001\n\010Computer\022\023\n\013CpuCore" +
+      "\n\016computer.proto\"\252\002\n\010Computer\022\023\n\013CpuCore" +
       "Temp\030\001 \001(\t\022\023\n\013CpuCoreLoad\030\002 \001(\t\022\024\n\014CpuCo" +
       "reClock\030\003 \001(\t\022\026\n\016CpuPackageTemp\030\004 \001(\t\022\026\n" +
       "\016CpuPackageLoad\030\005 \001(\t\022\027\n\017CpuPackageClock" +
       "\030\006 \001(\t\022\017\n\007GpuLoad\030\007 \001(\t\022\020\n\010GpuClock\030\010 \001(" +
-      "\t\022\017\n\007GpuTemp\030\t \001(\t\022\014\n\004Date\030\n \001(\t\"\225\001\n\024Com" +
-      "puterListResponse\022=\n\014computerList\030\001 \003(\0132" +
-      "\'.ComputerListResponse.ComputerListEntry" +
-      "\032>\n\021ComputerListEntry\022\013\n\003key\030\001 \001(\005\022\030\n\005va" +
-      "lue\030\002 \001(\0132\t.Computer:\0028\001\"=\n\025ComputerArra",
-      "yResponse\022$\n\004list\030\001 \003(\0132\026.ComputerArrayR" +
-      "esponse\"\034\n\014ComputerName\022\014\n\004name\030\001 \001(\t\"\007\n" +
-      "\005Empty2\254\001\n\017computerService\0222\n\017GetCompute" +
-      "rList\022\006.Empty\032\025.ComputerListResponse\"\000\022*" +
-      "\n\023GetRealtimeComputer\022\006.Empty\032\t.Computer" +
-      "\"\000\0229\n\033GetRealtimeComputerWithName\022\r.Comp" +
-      "uterName\032\t.Computer\"\000b\006proto3"
+      "\t\022\017\n\007GpuTemp\030\t \001(\t\022\014\n\004Date\030\n \001(\t\022\017\n\007Free" +
+      "Ram\030\013 \001(\t\022\017\n\007UsedRam\030\014 \001(\t\022\017\n\007LoadRam\030\r " +
+      "\001(\t\022\017\n\007HddLoad\030\016 \001(\t\022\017\n\007HddTemp\030\017 \001(\t\"\225\001" +
+      "\n\024ComputerListResponse\022=\n\014computerList\030\001" +
+      " \003(\0132\'.ComputerListResponse.ComputerList",
+      "Entry\032>\n\021ComputerListEntry\022\013\n\003key\030\001 \001(\005\022" +
+      "\030\n\005value\030\002 \001(\0132\t.Computer:\0028\001\"=\n\025Compute" +
+      "rArrayResponse\022$\n\004list\030\001 \003(\0132\026.ComputerA" +
+      "rrayResponse\"\034\n\014ComputerName\022\014\n\004name\030\001 \001" +
+      "(\t\"\007\n\005Empty2\357\001\n\017computerService\022A\n\027GetCo" +
+      "mputerListWithName\022\r.ComputerName\032\025.Comp" +
+      "uterListResponse\"\000\0222\n\017GetComputerList\022\006." +
+      "Empty\032\025.ComputerListResponse\"\000\022*\n\023GetRea" +
+      "ltimeComputer\022\006.Empty\032\t.Computer\"\000\0229\n\033Ge" +
+      "tRealtimeComputerWithName\022\r.ComputerName",
+      "\032\t.Computer\"\000b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -4097,7 +4786,7 @@ public final class ComputerOuterClass {
     internal_static_Computer_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Computer_descriptor,
-        new String[] { "CpuCoreTemp", "CpuCoreLoad", "CpuCoreClock", "CpuPackageTemp", "CpuPackageLoad", "CpuPackageClock", "GpuLoad", "GpuClock", "GpuTemp", "Date", });
+        new String[] { "CpuCoreTemp", "CpuCoreLoad", "CpuCoreClock", "CpuPackageTemp", "CpuPackageLoad", "CpuPackageClock", "GpuLoad", "GpuClock", "GpuTemp", "Date", "FreeRam", "UsedRam", "LoadRam", "HddLoad", "HddTemp", });
     internal_static_ComputerListResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_ComputerListResponse_fieldAccessorTable = new

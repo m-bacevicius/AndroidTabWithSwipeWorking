@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -77,25 +78,6 @@ public class TestActivity2 extends Activity {
                 ((TextView)findViewById(R.id.someTextView1)).setText(String.valueOf(timer.isRunning()));
             }
         });
-
-        /*try{
-            ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43432)
-                    .usePlaintext(true)
-                    .build();
-            computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);
-            ComputerOuterClass.ComputerListResponse response = stub.getComputerList(ComputerOuterClass.Empty.newBuilder().build());
-            //ComputerOuterClass.Computer response = stub.getRealtimeComputer(ComputerOuterClass.Empty.newBuilder().build());
-            System.out.print(response + "The count " + response.getComputerListCount() + '\n');
-            Map<Integer, ComputerOuterClass.Computer> map = response.getComputerListMap();
-            Log.e("LOG SIZE", String.valueOf(map.size()));
-            for (int x = 0; x < map.size(); x++) {
-                Log.i("MAP DATA",map.get(x).getCpuCoreTemp());
-            }
-        }
-        catch (Exception e)
-        {
-            Log.e("ERROR", e.toString());
-        }*/
 
     }
 
