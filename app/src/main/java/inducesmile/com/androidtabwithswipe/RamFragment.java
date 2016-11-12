@@ -42,18 +42,16 @@ public class RamFragment extends Fragment {
 
     TimerSingleton singletonTimer = TimerSingleton.getInstance();
 
-    final Handler handler = new Handler();
     private LineGraphSeries<DataPoint> mSeries1;
     private LineGraphSeries<DataPoint> mSeries2;
     private LineGraphSeries<DataPoint> mSeries3;
-    private double graphLastXValue = 5d;
+    private double graphLastXValue = 1d;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ram_fragment, container, false);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
         StrictMode.setThreadPolicy(policy);
 
         GraphView graph = (GraphView) view.findViewById(R.id.graph);
@@ -127,13 +125,11 @@ public class RamFragment extends Fragment {
             try {
                 graphLastXValue += 1d;
                 mSeries1.appendData(new DataPoint(graphLastXValue, Double.valueOf(response.getLoadRam())), true, 40);
-                Log.i("Runner1", response.getLoadRam());
             } catch (Exception e) {
                 Log.e("RamFragmen 1", e.toString());
             }
             try {
                 mSeries2.appendData(new DataPoint(graphLastXValue, Double.valueOf(response.getUsedRam())), true, 40);
-                Log.i("Runner2", response.getUsedRam());
             } catch (Exception e) {
                 Log.e("RamFragmen 2", e.toString());
             }

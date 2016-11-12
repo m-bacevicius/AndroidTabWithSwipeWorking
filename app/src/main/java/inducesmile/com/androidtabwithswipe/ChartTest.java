@@ -47,8 +47,8 @@ import io.grpc.ManagedChannelBuilder;
 
 public class ChartTest extends Activity {
 
-    List<Entry> entries = new ArrayList<Entry>();
     LineChart chart;
+    LineChart chart2;
     ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,29 +59,17 @@ public class ChartTest extends Activity {
                 "Loading your chart. Please wait...", true);
 
         chart = (LineChart) findViewById(R.id.chart);
+        chart2 = (LineChart) findViewById(R.id.chart2);
 
         try {
-            //entries = fillUpTheDataSeries(getMap());
-            //startTestThread();
-            GetRate asyncRate = new GetRate();
+            GetChart1 asyncRate = new GetChart1();
             asyncRate.execute();
         }
         catch (Exception e)
         {}
-        /*LineDataSet dataSet = new LineDataSet(entries, "Cpu package temp"); // add entries to dataset
-        dataSet.setColor(Color.BLUE);
-        dataSet.setDrawCircles(false);
-        dataSet.setFillColor(Color.BLUE);
-        dataSet.setDrawFilled(true);
-
-        LineData lineData = new LineData(dataSet);
-        //chart.animateY(3000);
-        chart.animateX(3000, Easing.EasingOption.EaseInOutSine);
-        chart.setData(lineData);
-        chart.invalidate(); // refresh*/
     }
 
-    private class GetRate extends AsyncTask<Void, Integer, Map<Integer, ComputerOuterClass.Computer>> {
+    private class GetChart1 extends AsyncTask<Void, Integer, Map<Integer, ComputerOuterClass.Computer>> {
 
         @Override
         protected Map<Integer, ComputerOuterClass.Computer> doInBackground(Void... params) {
@@ -93,19 +81,56 @@ public class ChartTest extends Activity {
         @Override
         protected void onPostExecute(Map<Integer, ComputerOuterClass.Computer> result) {
             // Do whatever you need with the string, you can update your UI from here
-            entries = fillUpTheDataSeries(result);
-            Log.d("onPostExecute", "Filling up data");
-            LineDataSet dataSet = new LineDataSet(entries, "CPU package temperature"); // add entries to dataset
-            dataSet.setColor(Color.BLUE);
-            dataSet.setDrawCircles(false);
-            dataSet.setFillColor(Color.BLUE);
-            dataSet.setDrawFilled(true);
+            LineData lineData = new LineData();
 
-            LineData lineData = new LineData(dataSet);
+            LineDataSet tempDataSet = new LineDataSet(fillUpTheChart(result, "Load").get(0), "CPU Load");
+            tempDataSet.setColor(Color.YELLOW);
+            tempDataSet.setDrawCircles(false);
+            lineData.addDataSet(tempDataSet);
+
+            tempDataSet = new LineDataSet(fillUpTheChart(result, "Load").get(1), "GPU Load");
+            tempDataSet.setColor(Color.GREEN);
+            tempDataSet.setDrawCircles(false);
+            lineData.addDataSet(tempDataSet);
+
+            tempDataSet = new LineDataSet(fillUpTheChart(result, "Load").get(2), "RAM Load");
+            tempDataSet.setColor(Color.RED);
+            tempDataSet.setDrawCircles(false);
+            lineData.addDataSet(tempDataSet);
+
+            tempDataSet = new LineDataSet(fillUpTheChart(result, "Load").get(3), "HDD Load");
+            tempDataSet.setColor(Color.BLUE);
+            tempDataSet.setDrawCircles(false);
+            lineData.addDataSet(tempDataSet);
+
             //chart.animateY(3000);
             //chart.animateX(3000, Easing.EasingOption.EaseInOutSine);
+
+            //chart2 data filling
+
+            LineData lineData2 = new LineData();
+
+            tempDataSet = new LineDataSet(fillUpTheChart(result, "Temperature").get(0), "CPU Temperature");
+            tempDataSet.setColor(Color.YELLOW);
+            tempDataSet.setDrawCircles(false);
+            lineData2.addDataSet(tempDataSet);
+
+            tempDataSet = new LineDataSet(fillUpTheChart(result, "Temperature").get(1), "GPU Temperature");
+            tempDataSet.setColor(Color.GREEN);
+            tempDataSet.setDrawCircles(false);
+            lineData2.addDataSet(tempDataSet);
+
+            tempDataSet = new LineDataSet(fillUpTheChart(result, "Temperature").get(3), "HDD Temperature");
+            tempDataSet.setColor(Color.BLUE);
+            tempDataSet.setDrawCircles(false);
+            lineData2.addDataSet(tempDataSet);
+
             chart.setData(lineData);
             chart.invalidate(); // refresh
+
+            chart2.setData(lineData2);
+            chart2.invalidate();
+
             dialog.hide();
         }
     }
@@ -121,34 +146,54 @@ public class ChartTest extends Activity {
         return map;
     }
 
-    private List<Entry> fillUpTheDataSeries(Map<Integer, ComputerOuterClass.Computer> stuff) {
-        //DataPoint[] points = new DataPoint[stuff.entrySet().size()];
-        List<Entry> entries = new ArrayList<Entry>();
+    private List<List<Entry>> fillUpTheChart(Map<Integer, ComputerOuterClass.Computer> stuff, String sortOfData) {
+        List<Entry> Cpu = new ArrayList<Entry>();
+        List<Entry> Gpu = new ArrayList<Entry>();
+        List<Entry> Ram = new ArrayList<Entry>();
+        List<Entry> Hdd = new ArrayList<Entry>();
+        double cpu = 0;
+        double gpu = 0;
+        double ram = 0;
+        double hdd = 0;
+
+
         int counter = 0;
         for (Map.Entry<Integer, ComputerOuterClass.Computer> entry : stuff.entrySet()) {
             Integer key = entry.getKey();
-            ComputerOuterClass.Computer tab = entry.getValue();
-            String data = tab.getDate();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = new Date();
-            double temp = Double.valueOf(tab.getCpuPackageLoad());
-            try {
-                date = dateFormat.parse(data);// all done
-            } catch (Exception e) {
-                Log.e("Data conversion", e.toString());
+            ComputerOuterClass.Computer computer = entry.getValue();
+            if (sortOfData == "Temperature") {
+                cpu = Double.valueOf(computer.getCpuPackageTemp());
+                gpu = Double.valueOf(computer.getGpuTemp());
+                ram = 0f;
+                hdd = Double.valueOf(computer.getHddTemp());
             }
-            Date d1 = Calendar.getInstance().getTime();
-            if (d1 == null) {
-                Log.e("", "d1 is null");
+            else if (sortOfData == "Load")
+            {
+                cpu = Double.valueOf(computer.getCpuPackageLoad());
+                gpu = Double.valueOf(computer.getGpuLoad());
+                ram = Double.valueOf(computer.getLoadRam());
+                hdd = Double.valueOf(computer.getHddLoad());
             }
-            if (Double.isNaN(temp)) {
-                Log.e("", "temp is null");
+            if (Double.isNaN(cpu) || Double.isNaN(gpu) || Double.isNaN(ram) || Double.isNaN(hdd)) {
+                Log.e("ChartTest", "tempData is null");
             }
-            //mSeries1.appendData(new DataPoint(date, temp), true, 40);
-            counter++;
-            entries.add(new Entry(counter, (int) temp));
+            else {
+                counter++;
+                //entries.add(new Entry(counter, (int) tempData));
+                Cpu.add(new Entry(counter, (int) cpu));
+                Gpu.add(new Entry(counter, (int) gpu));
+                Ram.add(new Entry(counter, (int) ram));
+                Hdd.add(new Entry(counter, (int) hdd));
+            }
         }
-        return entries;
+        //List<List<Entry>> list = new ArrayList<>();
+        List<List<Entry>> list = new ArrayList<List<Entry>>(4);
+        list.add(Cpu);
+        list.add(Gpu);
+        list.add(Ram);
+        list.add(Hdd);
+        return list;
+
     }
     private String readFromPref() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
