@@ -2,6 +2,7 @@ package inducesmile.com.androidtabwithswipe;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -25,12 +26,26 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import lecho.lib.hellocharts.gesture.ContainerScrollType;
+import lecho.lib.hellocharts.gesture.ZoomType;
+import lecho.lib.hellocharts.listener.ViewportChangeListener;
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.Viewport;
+import lecho.lib.hellocharts.util.ChartUtils;
+import lecho.lib.hellocharts.view.LineChartView;
+import lecho.lib.hellocharts.view.PreviewLineChartView;
+
+import static android.R.attr.data;
 
 /**
  * Created by Cube on 10/27/2016.
@@ -38,119 +53,89 @@ import io.grpc.ManagedChannelBuilder;
 
 public class ListActivity extends Activity {
 
-    public static Map<Integer, ComputerOuterClass.Computer> map;
-    public static BarGraphSeries<DataPoint> mSeries1;
-    private final Handler mHandler = new Handler();
-    private Runnable mTimer1;
+    private LineChartView chart;
+    private PreviewLineChartView previewChart;
+    private LineChartData data;
+    /**
+     * Deep copy of data.
+     */
+    private LineChartData previewData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_test);
 
-        GraphView graph = (GraphView) findViewById(R.id.graph);
+        chart = (LineChartView)findViewById(R.id.chart);
+        previewChart = (PreviewLineChartView)findViewById(R.id.chart_preview);
 
-        map = getMap();
-        //fillUpTheDataSeries(map, mSeries1);
-        initGraph(graph);
+        // Generate data for previewed chart and copy of that data for preview chart.
+        generateDefaultData();
+
+        chart.setLineChartData(data);
+        // Disable zoom/scroll for previewed chart, visible chart ranges depends on preview chart viewport so
+        // zoom/scroll is unnecessary.
+        chart.setZoomEnabled(false);
+        chart.setScrollEnabled(false);
+
+        previewChart.setLineChartData(previewData);
+        previewChart.setViewportChangeListener(new ViewportListener());
+
+        previewX(false);
     }
 
-    public void initGraph (GraphView graph)
-    {
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(fillUpTheDataSeries(map));
+    private void generateDefaultData() {
+        int numValues = 2000;
 
-        // set manual X bounds
-        graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(100);
+        List<PointValue> values = new ArrayList<PointValue>();
+        for (int i = 0; i < numValues; ++i) {
+            values.add(new PointValue(i, (float) Math.random() * 100f));
+        }
 
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(80);
-        graph.computeScroll();
+        Line line = new Line(values);
+        line.setColor(ChartUtils.COLOR_GREEN);
+        line.setHasPoints(false);// too many values so don't draw points.
 
-        // enable scaling and scrolling
-        graph.getViewport().setScalable(true);
-        //graph.getViewport().setScalableY(true);
+        List<Line> lines = new ArrayList<Line>();
+        lines.add(line);
 
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(graph.getContext(), new SimpleDateFormat("HH:mm:ss")));
-        //graph.getGridLabelRenderer().setNumHorizontalLabels(80);
-        graph.getGridLabelRenderer().setHumanRounding(false);
-        graph.addSeries(series);
+        data = new LineChartData(lines);
+        data.setAxisXBottom(new Axis());
+        data.setAxisYLeft(new Axis().setHasLines(true));
+
+        // prepare preview data, is better to use separate deep copy for preview chart.
+        // Set color to grey to make preview area more visible.
+        previewData = new LineChartData(data);
+        previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
+
     }
+
+    private void previewX(boolean animate) {
+        Viewport tempViewport = new Viewport(chart.getMaximumViewport());
+        float dx = tempViewport.width() / 4;
+        tempViewport.inset(dx, 0);
+        if (animate) {
+            previewChart.setCurrentViewportWithAnimation(tempViewport);
+        } else {
+            previewChart.setCurrentViewport(tempViewport);
+        }
+        previewChart.setZoomType(ZoomType.HORIZONTAL);
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
-            new Thread(new Runnable() {
-                public void run() {
-                    //map = getMap();
-                    android.os.SystemClock.sleep(5000);
-                }
-            }).start();
 
-
-        ((Button) findViewById(R.id.button)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(), String.valueOf(map.containsKey(2)), Toast.LENGTH_SHORT).show();
-                /*for ( Map.Entry<Integer, ComputerOuterClass.Computer> entry : map.entrySet()) {
-                    Integer key = entry.getKey();
-                    ComputerOuterClass.Computer tab = entry.getValue();
-                    Log.e(String.valueOf(key), tab.getCpuCoreTemp());
-                    // do something with key and/or tab
-                }*/
-                //fillUpTheDataSeries(map, mSeries1);
-            }
-        });
     }
 
+    private class ViewportListener implements ViewportChangeListener {
 
-    private Map<Integer, ComputerOuterClass.Computer> getMap() {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43432)
-                .usePlaintext(true)
-                .build();
-        computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);
-        ComputerOuterClass.ComputerListResponse response = stub.getComputerList(ComputerOuterClass.Empty.newBuilder().build());
-        //ComputerOuterClass.Computer response = stub.getRealtimeComputer(ComputerOuterClass.Empty.newBuilder().build());
-        System.out.print(response + "The count " + response.getComputerListCount() + '\n');
-        Map<Integer, ComputerOuterClass.Computer> map = response.getComputerListMap();
-        /*for (int x = 0; x < map.size(); x++) {
-            System.out.println(map.get(x).getCpuCoreTemp());
-        }*/
-        return map;
-    }
-
-    private DataPoint[] fillUpTheDataSeries(Map<Integer, ComputerOuterClass.Computer> stuff)
-    {
-        DataPoint[] points = new DataPoint[stuff.entrySet().size()];
-        int counter = 0;
-        for ( Map.Entry<Integer, ComputerOuterClass.Computer> entry : stuff.entrySet())
-        {
-            Integer key = entry.getKey();
-            ComputerOuterClass.Computer tab = entry.getValue();
-            String data = tab.getDate();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = new Date();
-            double temp = Double.valueOf(tab.getCpuPackageTemp());
-            try {
-                date = dateFormat.parse(data);// all done
-            } catch (Exception e) {
-                Log.e("Data conversion", e.toString());
-            }
-            Date d1 = Calendar.getInstance().getTime();
-            if (d1 == null)
-            {
-                Log.e("","d1 is null");
-            }
-            if (Double.isNaN(temp))
-            {
-                Log.e("", "temp is null");
-            }
-            Log.e("DATE", date.toString());
-            Log.d("TEMP", String.valueOf(temp));
-            //mSeries1.appendData(new DataPoint(date, temp), true, 40);
-            points[counter++] = new DataPoint(date, temp);
+        @Override
+        public void onViewportChanged(Viewport newViewport) {
+            // don't use animation, it is unnecessary when using preview chart.
+            chart.setCurrentViewport(newViewport);
         }
-        return points;
-        //mSeries1.appendData(new DataPoint(graphLastXValue, Double.valueOf(GpuClock)), true, 40);
+
     }
 }

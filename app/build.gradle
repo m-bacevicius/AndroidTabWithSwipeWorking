@@ -33,4 +33,5 @@ dependencies {
     compile 'com.jjoe64:graphview:4.2.1'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.0'
     compile files('libs/MPAndroidChart-3.0.0/gradle/wrapper/gradle-wrapper.jar')
+    compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
 }

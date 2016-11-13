@@ -11,7 +11,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/temperature"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:hardwareAccelerated="true">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -27,7 +28,7 @@
         <activity android:name=".TestActivity2"/>
         <activity android:name=".ListActivity"/>
         <activity android:name=".ChartTest"
-            android:hardwareAccelerated="false"/>
+            android:hardwareAccelerated="true"/>
     </application>
 
 </manifest>

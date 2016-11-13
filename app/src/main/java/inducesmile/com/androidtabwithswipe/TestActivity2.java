@@ -78,6 +78,12 @@ public class TestActivity2 extends Activity {
                 ((TextView)findViewById(R.id.someTextView1)).setText(String.valueOf(timer.isRunning()));
             }
         });
+        ((Button) findViewById(R.id.button2)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

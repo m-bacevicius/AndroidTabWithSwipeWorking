@@ -29,8 +29,6 @@ import java.util.Map;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
-import static inducesmile.com.androidtabwithswipe.ListActivity.mSeries1;
-
 /**
  * Created by Cube on 11/11/2016.
  */

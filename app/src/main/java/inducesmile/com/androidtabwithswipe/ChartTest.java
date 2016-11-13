@@ -18,7 +18,9 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.example.ComputerOuterClass;
 import com.example.computerServiceGrpc;
@@ -54,6 +56,10 @@ public class ChartTest extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chart_test);
+
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
 
         dialog = ProgressDialog.show(ChartTest.this, "",
                 "Loading your chart. Please wait...", true);
