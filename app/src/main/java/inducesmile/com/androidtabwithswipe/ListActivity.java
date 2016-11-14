@@ -56,10 +56,10 @@ public class ListActivity extends Activity {
     private LineChartView chart;
     private PreviewLineChartView previewChart;
     private LineChartData data;
+    private LineChartData previewData;
     /**
      * Deep copy of data.
      */
-    private LineChartData previewData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +85,16 @@ public class ListActivity extends Activity {
     }
 
     private void generateDefaultData() {
-        int numValues = 2000;
+        int numValues = 3600;
 
         List<PointValue> values = new ArrayList<PointValue>();
+        List<PointValue> values2 = new ArrayList<PointValue>();
         for (int i = 0; i < numValues; ++i) {
             values.add(new PointValue(i, (float) Math.random() * 100f));
+            if (i%50 == 0)
+            {
+                values2.add(new PointValue(i, (float) Math.random() * 100f));
+            }
         }
 
         Line line = new Line(values);
@@ -105,8 +110,23 @@ public class ListActivity extends Activity {
 
         // prepare preview data, is better to use separate deep copy for preview chart.
         // Set color to grey to make preview area more visible.
-        previewData = new LineChartData(data);
-        previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
+
+        Line line2 = new Line(values2);
+        line2.setColor(ChartUtils.COLOR_GREEN);
+        line2.setHasPoints(false);// too many values so don't draw points.
+
+        List<Line> lines2 = new ArrayList<Line>();
+        lines2.add(line2);
+
+        previewData = new LineChartData(lines2);
+        previewData.setAxisXBottom(new Axis());
+        previewData.setAxisYLeft(new Axis().setHasLines(true));
+
+        Log.e("Line1", String.valueOf(values.size()));
+        Log.e("Line2", String.valueOf(values2.size()));
+
+        //previewData = new LineChartData(data);
+        //previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
 
     }
 
