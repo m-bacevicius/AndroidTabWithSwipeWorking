@@ -80,7 +80,7 @@ public class TestActivity2 extends Activity {
         });
         ((Button) findViewById(R.id.button2)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ListActivity2.class);
                 startActivity(intent);
             }
         });
