@@ -8,18 +8,41 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
-    <Button
-        android:text="List2"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/button" />
+        android:layout_height="wrap_content">
 
-    <lecho.lib.hellocharts.view.LineChartView
-        android:id="@+id/chart_top"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
-    </lecho.lib.hellocharts.view.LineChartView>
+        <TextView
+            android:text="GPU"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView4"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:textAlignment="center"
+            android:gravity="center" />
+
+        <TextView
+            android:text="RAM"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_blue_dark"
+            android:gravity="center" />
+
+        <TextView
+            android:text="HDD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:layout_weight="1"
+            android:textColor="@android:color/holo_red_dark"
+            android:textAlignment="center"
+            android:gravity="center" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -27,6 +50,13 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/darker_gray" />
+
+    <lecho.lib.hellocharts.view.LineChartView
+        android:id="@+id/chart_top"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+    </lecho.lib.hellocharts.view.LineChartView>
 
     <lecho.lib.hellocharts.view.ColumnChartView
         android:id="@+id/chart_bottom"

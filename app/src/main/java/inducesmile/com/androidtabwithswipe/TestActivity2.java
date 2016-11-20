@@ -102,9 +102,11 @@ public class TestActivity2 extends Activity {
                 if(isChecked){
                     timer.setIsEnabled(true);
                     ((TextView)findViewById(R.id.someTextView1)).setText(String.valueOf(timer.isRunning()));
+                    ((TextView)findViewById(R.id.someTextView1)).setTextColor(Color.rgb(0,135,38));
                 }else{
                     timer.setIsEnabled(false);
                     ((TextView)findViewById(R.id.someTextView1)).setText(String.valueOf(timer.isRunning()));
+                    ((TextView)findViewById(R.id.someTextView1)).setTextColor(Color.rgb(153,0,0));
                     getNotification2();
                 }
 
@@ -140,8 +142,8 @@ public class TestActivity2 extends Activity {
                 //.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND | Notification.FLAG_SHOW_LIGHTS)
                 .setLights(Color.MAGENTA, 100, 100)
-                .setContentTitle("Content Title")
-                .setContentText("This is a content test")
+                .setContentTitle("Be advised")
+                .setContentText("Notifications are turned off")
                 .setSmallIcon(R.drawable.temperature)
         //.setStyle(new NotificationCompat.BigTextStyle())
         ;
