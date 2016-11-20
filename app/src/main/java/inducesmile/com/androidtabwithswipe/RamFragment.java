@@ -62,7 +62,8 @@ public class RamFragment extends Fragment {
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(40);
         graph.getLegendRenderer().setVisible(true);
-        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.MIDDLE);
+        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        graph.getGridLabelRenderer().setVerticalAxisTitle(" ");
 
         GraphView graph2 = (GraphView) view.findViewById(R.id.graph2);
         mSeries2 = new LineGraphSeries<>();
@@ -72,7 +73,8 @@ public class RamFragment extends Fragment {
         graph2.getViewport().setMinX(0);
         graph2.getViewport().setMaxX(40);
         graph2.getLegendRenderer().setVisible(true);
-        graph2.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.MIDDLE);
+        graph2.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        graph2.getGridLabelRenderer().setVerticalAxisTitle(" ");
 
         GraphView graph3 = (GraphView) view.findViewById(R.id.graph3);
         mSeries3 = new LineGraphSeries<>();
@@ -83,7 +85,8 @@ public class RamFragment extends Fragment {
         graph3.getViewport().setMinX(0);
         graph3.getViewport().setMaxX(40);
         graph3.getLegendRenderer().setVisible(true);
-        graph3.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.MIDDLE);
+        graph3.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        graph3.getGridLabelRenderer().setVerticalAxisTitle(" ");
 
 
         timer.start();
@@ -94,16 +97,17 @@ public class RamFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         timer.start();
-
-        Log.e("RamFragment", "ONRESUME");
         singletonTimer.stop();
     }
     @Override
     public void onPause() {
         super.onPause();
         timer.cancel();
+        if(!singletonTimer.isRunning())
+        {
+            singletonTimer.start();
+        }
     }
     protected CountDownTimer timer = new CountDownTimer(1000, 1000) {
 
@@ -111,6 +115,7 @@ public class RamFragment extends Fragment {
 
         public void onTick(long millisUntilFinished) {
             try {
+                Log.e("RamFragment", "Running");
                 ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43431)
                         .usePlaintext(true)
                         .build();

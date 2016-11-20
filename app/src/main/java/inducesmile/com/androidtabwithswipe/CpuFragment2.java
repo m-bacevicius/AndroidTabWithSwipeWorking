@@ -41,7 +41,7 @@ public class CpuFragment2 extends Fragment {
     public CpuFragment2() {
     }
 
-    TimerSingleton timer = TimerSingleton.getInstance();
+    TimerSingleton timerSingleton = TimerSingleton.getInstance();
 
     private final Handler mHandler = new Handler();
     private Runnable mTimer1;
@@ -100,6 +100,7 @@ public class CpuFragment2 extends Fragment {
         GraphView graph = (GraphView) view.findViewById(R.id.graph);
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMaxX(40);
+        graph.getGridLabelRenderer().setVerticalAxisTitle(" ");
         for (int x = 0; x < NumberOfCores; x++) {
             Random rnd = new Random();
             int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
@@ -114,6 +115,7 @@ public class CpuFragment2 extends Fragment {
         graph2.getViewport().setXAxisBoundsManual(true);
         graph2.getViewport().setMaxX(40);
         graph2.getViewport().setMaxY(100);
+        graph2.getGridLabelRenderer().setVerticalAxisTitle(" ");
         for (int x = 0; x < NumberOfCores; x++) {
             Random rnd = new Random();
             int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
@@ -128,6 +130,7 @@ public class CpuFragment2 extends Fragment {
         GraphView graph3 = (GraphView) view.findViewById(R.id.graph3);
         graph3.getViewport().setXAxisBoundsManual(true);
         graph3.getViewport().setMaxX(40);
+        graph3.getGridLabelRenderer().setVerticalAxisTitle(" ");
         for (int x = 0; x < NumberOfCores; x++) {
             Random rnd = new Random();
             int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
@@ -146,9 +149,12 @@ public class CpuFragment2 extends Fragment {
     public void onResume() {
         super.onResume();
         Log.e("onResume", "ONRESUME");
-        timer.stop();
+        timerSingleton.stop();
 
-        mTimer1 = new Runnable() {
+        timer.start();
+
+
+        /*mTimer1 = new Runnable() {
             @Override
             public void run() {
                 try {
@@ -196,38 +202,53 @@ public class CpuFragment2 extends Fragment {
                 mHandler.postDelayed(this, 1000);
             }
         };
-        mHandler.postDelayed(mTimer3, 1000);
+        mHandler.postDelayed(mTimer3, 1000);*/
     }
+    CountDownTimer timer = new CountDownTimer(1000, 1000) {
+
+        public void onTick(long millisUntilFinished) {
+            Log.e("CpuFragment", "Running");
+            try{
+                getGrpcData(DeviceName);
+            }
+            catch (Exception e)
+            {
+                Log.e("CpuFragment", e.toString());
+            }
+                graphLastXValue += 1d;
+                for (int x = 0; x < CoreTemp.length; x++) {
+                    mSeriesCpuCoreTemp.get(x).appendData(new DataPoint(graphLastXValue, Double.valueOf(CoreTemp[x])), true, 40);
+                    mSeriesCpuCoreLoad.get(x).appendData(new DataPoint(graphLastXValue, Double.valueOf(CoreLoad[x])), true, 40);
+                    mSeriesCpuCoreClock.get(x).appendData(new DataPoint(graphLastXValue, Double.valueOf(CoreClock[x])), true, 40);
+                }
+            }
+
+        public void onFinish() {
+            start();
+        }
+    };
 
     @Override
     public void onPause() {
-        //timer.start();
-        mHandler.removeCallbacks(mTimer1);
-        mHandler.removeCallbacks(mTimer2);
-        mHandler.removeCallbacks(mTimer3);
-        Log.e("onPause", "ONPAUSE");
         super.onPause();
+        /*mHandler.removeCallbacks(mTimer1);
+        mHandler.removeCallbacks(mTimer2);
+        mHandler.removeCallbacks(mTimer3);*/
+        Log.e("CpuFragment", "onPause");
+        timer.cancel();
+        if (!timerSingleton.isRunning())
+        {
+            timerSingleton.start();
+        }
     }
     @Override
     public void onStop()
     {
         super.onStop();
-        mHandler.removeCallbacks(mTimer1);
+        /*mHandler.removeCallbacks(mTimer1);
         mHandler.removeCallbacks(mTimer2);
-        mHandler.removeCallbacks(mTimer3);
-    }
-
-    public void getGrpcData() throws InterruptedException {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43431)
-                .usePlaintext(true)
-                .build();
-        computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);
-        //ComputerOuterClass.ComputerListResponse response = stub.getComputerList(ComputerOuterClass.Empty.newBuilder().build());
-        ComputerOuterClass.Computer response = stub.getRealtimeComputer(ComputerOuterClass.Empty.newBuilder().build());
-        CoreClock = response.getCpuCoreClock().split(" ");
-        CoreLoad = response.getCpuCoreLoad().split(" ");
-        CoreTemp = response.getCpuCoreTemp().split(" ");
-        NumberOfCores = CoreClock.length;
+        mHandler.removeCallbacks(mTimer3);*/
+        timer.cancel();
     }
 
     public ComputerOuterClass.Computer getGrpcData (String name) throws InterruptedException {
@@ -242,18 +263,34 @@ public class CpuFragment2 extends Fragment {
         CoreTemp = response.getCpuCoreTemp().split(" ");
         NumberOfCores = CoreClock.length;
         return response;
-
-        /*ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43431)
-                .usePlaintext(true)
-                .build();
-        //ComputerOuterClass.ComputerName request = ComputerOuterClass.ComputerName.newBuilder().setName(name).build();
-        computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);
-        ComputerOuterClass.Computer response = stub.getRealtimeComputerWithName(ComputerOuterClass.ComputerName.newBuilder().setName("DESKTOP-0RPJR9K").build());*/
     }
 
     String readFromPref() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
         String name = settings.getString("name", "");
         return name;
+    }
+    private class GetChart1 extends AsyncTask<Void, Integer, ComputerOuterClass.Computer> {
+
+        @Override
+        protected ComputerOuterClass.Computer  doInBackground(Void... params) {
+            try{
+                return getGrpcData(DeviceName);
+            }
+            catch (Exception e)
+            {}
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(ComputerOuterClass.Computer result) {
+            // Do whatever you need with the string, you can update your UI from here
+            graphLastXValue += 1d;
+            for (int x = 0; x < CoreTemp.length; x++) {
+                mSeriesCpuCoreTemp.get(x).appendData(new DataPoint(graphLastXValue, Double.valueOf(CoreTemp[x])), true, 40);
+                mSeriesCpuCoreLoad.get(x).appendData(new DataPoint(graphLastXValue, Double.valueOf(CoreLoad[x])), true, 40);
+                mSeriesCpuCoreClock.get(x).appendData(new DataPoint(graphLastXValue, Double.valueOf(CoreClock[x])), true, 40);
+            }
+        }
     }
 }

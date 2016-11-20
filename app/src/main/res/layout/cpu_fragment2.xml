@@ -16,7 +16,7 @@
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/graph"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="200dip" />
 
             <com.jjoe64.graphview.GraphView
@@ -26,7 +26,7 @@
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/graph3"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="200dip" />
             <Button
                 android:text="Button"

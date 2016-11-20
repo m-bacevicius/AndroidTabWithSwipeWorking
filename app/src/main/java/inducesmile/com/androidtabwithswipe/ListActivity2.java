@@ -3,6 +3,7 @@ package inducesmile.com.androidtabwithswipe;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -90,7 +91,8 @@ public class ListActivity2 extends Activity {
 
             values = new ArrayList<SubcolumnValue>();
             for (int j = 0; j < numSubcolumns; ++j) {
-                values.add(new SubcolumnValue((float) Math.random() * 50f + 5, ChartUtils.pickColor()));
+                //values.add(new SubcolumnValue((float) Math.random() * 50f + 5, ChartUtils.pickColor()));
+                values.add(new SubcolumnValue((float) dataList.get(i).size(), ChartUtils.pickColor()));
             }
 
             //axisValues.add(new AxisValue(i).setLabel(months[i]));
@@ -127,20 +129,30 @@ public class ListActivity2 extends Activity {
 
     }
     private void generateInitialLineData() {
-        int numValues = 100;
+        int numValues = 3600;
 
         //List<AxisValue> axisValues = new ArrayList<AxisValue>();
         List<PointValue> values = new ArrayList<PointValue>();
+        List<PointValue> values2 = new ArrayList<PointValue>();
         for (int i = 0; i < numValues; ++i) {
             values.add(new PointValue(i, 0));
+            values2.add(new PointValue(i, 0));
             //axisValues.add(new AxisValue(i).setLabel(days[i]));
         }
 
         Line line = new Line(values);
         line.setColor(ChartUtils.COLOR_GREEN).setCubic(true);
+        line.setHasPoints(false);
+
+        Line line2 = new Line(values2);
+        line.setColor(ChartUtils.COLOR_BLUE).setCubic(true);
+        line.setHasPoints(false);
 
         List<Line> lines = new ArrayList<Line>();
         lines.add(line);
+        lines.add(line2);
+        lines.add(new Line(line));
+        lines.add(new Line(line2));
 
         lineData = new LineChartData(lines);
         //lineData.setAxisXBottom(new Axis(axisValues).setHasLines(true));
@@ -152,7 +164,7 @@ public class ListActivity2 extends Activity {
         chartTop.setViewportCalculationEnabled(false);
 
         // And set initial max viewport and current viewport- remember to set viewports after data.
-        Viewport v = new Viewport(0, 110, 100, 0);
+        Viewport v = new Viewport(0, 110, 3600, 0);
         chartTop.setMaximumViewport(v);
         chartTop.setCurrentViewport(v);
 
@@ -165,13 +177,32 @@ public class ListActivity2 extends Activity {
 
         // Modify data targets
         Line line = lineData.getLines().get(0);// For this example there is always only one line.
-        line.setColor(color);
+        //line.setColor(color);
+        line.setStrokeWidth(1);
         //line.setHasPoints(false);
-        for (PointValue value : line.getValues()) {
-            // Change target only for Y value.
-            value.setTarget(value.getX(), (float) Math.random() * range);
+
+        // Modify data targets
+        Line line2 = lineData.getLines().get(1);// For this example there is always only one line.
+        //line2.setColor(color);
+        line2.setStrokeWidth(1);
+        //line.setHasPoints(false);
+
+        Line line3 = lineData.getLines().get(2);// For this example there is always only one line.
+        //line3.setColor(color);
+
+        Line line4 = lineData.getLines().get(3);// For this example there is always only one line.
+        //line4.setColor(color);
+
+        for (int x = 0; x < line.getValues().size(); x++)
+        {
+            line.getValues().get(x).setTarget(line4.getValues().get(x).getX(), (float) Math.random() * range);
+            line2.getValues().get(x).setTarget(line4.getValues().get(x).getX(), (float) Math.random() * range);
+            line3.getValues().get(x).setTarget(line4.getValues().get(x).getX(), (float) Math.random() * range);
+            line4.getValues().get(x).setTarget(line4.getValues().get(x).getX(), (float) Math.random() * range);
         }
+
         // Start new data animation with 300ms duration;
+
         chartTop.startDataAnimation(300);
     }
 
@@ -179,21 +210,51 @@ public class ListActivity2 extends Activity {
         // Cancel last animation if not finished.
         chartTop.cancelDataAnimation();
 
-        List<PointValue> values = new ArrayList<PointValue>();
         List<ComputerOuterClass.Computer> list = dataList.get(index);
+
+        chartTop.setCurrentViewport(new Viewport(0, 110, list.size(), 0));
 
         Line line = lineData.getLines().get(0);// For this example there is always only one line.
         line.setColor(color);
-        line.getValues().clear();
+        line.setStrokeWidth(1);
 
-        for (int i = 0; i < list.size(); i++) {
-            values.add(new PointValue(i, Integer.valueOf(list.get(i).getCpuPackageTemp())));
+        Line line2 = lineData.getLines().get(1);// For this example there is always only one line.
+        line2.setColor(Color.BLACK);
+        line2.setStrokeWidth(1);
+
+        Line line3 = lineData.getLines().get(2);// For this example there is always only one line.
+        line3.setColor(Color.BLUE);
+        line3.setStrokeWidth(1);
+
+        Line line4 = lineData.getLines().get(3);// For this example there is always only one line.
+        line4.setColor(Color.RED);
+        line4.setStrokeWidth(1);
+
+        /*for (int i = 0; i < list.size(); i++) {
+            values.add(new PointValue(i, Integer.valueOf(list.get(i).getCpuPackageLoad())));
+            values2.add(new PointValue(i, Integer.valueOf(list.get(i).getGpuLoad())));
+            values3.add(new PointValue(i, Float.valueOf(list.get(i).getLoadRam())));
+            values4.add(new PointValue(i, Float.valueOf(list.get(i).getHddLoad())));
+        }*/
+
+        for (int x = 0; x < list.size(); x++)
+        {
+            line.getValues().get(x).setTarget(x, Float.valueOf((list.get(x).getCpuPackageLoad())));
+            line2.getValues().get(x).setTarget(x, Float.valueOf((list.get(x).getGpuLoad())));
+            line3.getValues().get(x).setTarget(x, Float.valueOf((list.get(x).getLoadRam())));
+            line4.getValues().get(x).setTarget(x, Float.valueOf((list.get(x).getHddLoad())));
         }
-        line.setHasPoints(false);
-        line.setValues(values);
+        line.setHasPoints(false);     //todo useful
+
+        line2.setHasPoints(false);    //todo useful;
+
+        line3.setHasPoints(false);    //todo useful
+
+        line4.setHasPoints(false);    //todo useful
+
 
         // Start new data animation with 300ms duration;
-        chartTop.startDataAnimation(1500);
+        chartTop.startDataAnimation(300);
     }
     private class ValueTouchListener implements ColumnChartOnValueSelectListener {
 

@@ -17,6 +17,8 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -84,6 +86,30 @@ public class TestActivity2 extends Activity {
                 startActivity(intent);
             }
         });
+        Switch switch1 = (Switch)findViewById(R.id.switch1);
+        /*if (timer.isRunning())
+            switch1.setChecked(true);
+        else
+        {
+            switch1.setChecked(false);
+        }*/
+        switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+
+                if(isChecked){
+                    timer.setIsEnabled(true);
+                    ((TextView)findViewById(R.id.someTextView1)).setText(String.valueOf(timer.isRunning()));
+                }else{
+                    timer.setIsEnabled(false);
+                    ((TextView)findViewById(R.id.someTextView1)).setText(String.valueOf(timer.isRunning()));
+                    getNotification2();
+                }
+
+            }
+        });
 
     }
 
@@ -94,7 +120,15 @@ public class TestActivity2 extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("Timer", "onResume");
+        timer.stop();
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (!timer.isRunning())
+        {
+            timer.start();
+        }
     }
 
     public void getNotification2() {

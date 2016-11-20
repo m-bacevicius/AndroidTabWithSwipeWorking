@@ -28,6 +28,11 @@ import io.grpc.ManagedChannelBuilder;
  * Created by Mantas Bacevičius on 2016-11-02.
  */
 public class TimerSingleton {
+
+    static boolean isRunning = false;
+    static long counter = 61;
+    static boolean isEnabled = false;
+
     private static TimerSingleton ourInstance = new TimerSingleton();
 
     public static TimerSingleton getInstance() {
@@ -44,26 +49,28 @@ public class TimerSingleton {
             ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43431)
                     .usePlaintext(true)
                     .build();
-            //ComputerOuterClass.ComputerName request = ComputerOuterClass.ComputerName.newBuilder().setName(name).build();
             computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);
             ComputerOuterClass.Computer response = stub.getRealtimeComputerWithName(ComputerOuterClass.ComputerName.newBuilder().setName(readFromPref(TestActivity2.getContext())).build());
-            try
-            {
-                if (Integer.valueOf(response.getCpuPackageLoad()) >= 50 && counter >= 600)
-                {
+            try {
+                if (Integer.valueOf(response.getCpuPackageLoad()) >= 50 && counter >= 60) {
                     Log.e("Timer", "CPU is heavily loaded");
                     getNotification2(TestActivity2.getContext(), "Heavy load for CPU has been detected: " + response.getCpuPackageLoad());
                     counter = 0;
                 }
-                else
+                else if (Integer.valueOf(response.getGpuLoad()) >= 50 && counter >= 60)
                 {
-                    Log.d("Timer gRPC", response.getCpuPackageLoad());
-                    Log.e("Timer counter", String.valueOf(counter));
+                    getNotification2(TestActivity2.getContext(), "Heavy load for GPU has been detected: " + response.getGpuLoad());
+                    counter = 0;
+                }
+                else if (Float.valueOf(response.getLoadRam()) >= 90 && counter >= 60)
+                {
+                    getNotification2(TestActivity2.getContext(), "Heavy load for RAM has been detected: " + response.getLoadRam());
+                    counter = 0;
+                }
+                else {
                     counter++;
                 }
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 stopTimer();
                 //timer3.cancel();
                 Log.e("", e.toString());
@@ -72,12 +79,11 @@ public class TimerSingleton {
         }
     };
 
-    private void startTimer()
-    {
+    private void startTimer() {
         runnable.run();
     }
-    private void stopTimer()
-    {
+
+    private void stopTimer() {
         handler.removeCallbacks(runnable);
     }
 
@@ -107,7 +113,7 @@ public class TimerSingleton {
         ;
         // Setting notification style
         Intent intent = new Intent(context, TestActivity2.class);       //TODO was () instead of context, TestActivity2.class
-                                                                        //TODO look for a better result
+        //TODO look for a better result
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, 0);
         builder.setContentIntent(contentIntent);
@@ -124,31 +130,40 @@ public class TimerSingleton {
         NotificationManagerCompat.from(context).notify(0, notification);
     }
 
-    static boolean isRunning = false;
-    static long counter = 601;
+    protected void setIsEnabled(boolean value) {
+        isEnabled = value;
+    }
 
-    protected void start()
-    {
-        startTimer();
-        //timer3.start();
-        isRunning = true;
-        Log.d("Timer Singleton", "Timer has started");
+    protected boolean getIsEnabled() {
+        return isEnabled;
+    }
+
+    protected void start() {
+        if (isEnabled) {
+            startTimer();
+            //timer3.start();
+            isRunning = true;
+            Log.d("Timer Singleton", "Timer has started");
+        }
+        else
+        {
+            stop();
+        }
 
     }
-    protected void stop()
-    {
+
+    protected void stop() {
         stopTimer();
         //timer3.cancel();
         isRunning = false;
         Log.d("Timer Singleton", "Timer has stopped");
     }
-    protected boolean isRunning()
-    {
+
+    protected boolean isRunning() {
         return isRunning;
     }
 
-    private void doGrpc()
-    {
+    private void doGrpc() {
         Log.e("TIMER", "IS WORKING");
         ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43431)
                 .usePlaintext(true)
@@ -156,23 +171,17 @@ public class TimerSingleton {
         //ComputerOuterClass.ComputerName request = ComputerOuterClass.ComputerName.newBuilder().setName(name).build();
         computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);
         ComputerOuterClass.Computer response = stub.getRealtimeComputerWithName(ComputerOuterClass.ComputerName.newBuilder().setName(readFromPref(TestActivity2.getContext())).build());
-        try
-        {
-            if (Integer.valueOf(response.getCpuPackageLoad()) >= 50 && counter >= 600)
-            {
+        try {
+            if (Integer.valueOf(response.getCpuPackageLoad()) >= 50 && counter >= 600) {
                 Log.e("Timer", "CPU is heavily loaded");
                 getNotification2(TestActivity2.getContext(), "Heavy load for CPU has been detected: " + response.getCpuPackageLoad());
                 counter = 0;
-            }
-            else
-            {
+            } else {
                 Log.d("Timer gRPC", response.getCpuPackageLoad());
                 Log.e("Timer counter", String.valueOf(counter));
                 counter++;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             stopTimer();
             //timer3.cancel();
             Log.e("", e.toString());

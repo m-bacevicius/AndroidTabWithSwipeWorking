@@ -41,6 +41,8 @@ public class GpuFragment extends Fragment {
     public GpuFragment() {
     }
 
+    TimerSingleton timerSingleton = TimerSingleton.getInstance();
+
     private final Handler mHandler = new Handler();
     private Runnable mTimer1;
     private Runnable mTimer2;
@@ -78,7 +80,8 @@ public class GpuFragment extends Fragment {
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(440);
         graph.getLegendRenderer().setVisible(true);
-        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.MIDDLE);
+        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        graph.getGridLabelRenderer().setVerticalAxisTitle(" ");
 
         GraphView graph2 = (GraphView)view.findViewById(R.id.graph2);
         mSeries2 = new LineGraphSeries<DataPoint>();
@@ -92,7 +95,8 @@ public class GpuFragment extends Fragment {
         graph2.getViewport().setMinY(45);
         graph2.getViewport().setMaxY(100);
         graph2.getLegendRenderer().setVisible(true);
-        graph2.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.MIDDLE);
+        graph2.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        graph2.getGridLabelRenderer().setVerticalAxisTitle(" ");
 
         GraphView graph3 = (GraphView)view.findViewById(R.id.graph3);
         mSeries3 = new LineGraphSeries<>();
@@ -103,13 +107,16 @@ public class GpuFragment extends Fragment {
         graph3.getViewport().setMaxX(120);
         graph3.getViewport().setScalable(true);
         graph3.getLegendRenderer().setVisible(true);
-        graph3.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.MIDDLE);
+        graph3.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        graph3.getGridLabelRenderer().setVerticalAxisTitle(" ");
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        timerSingleton.stop();
+
         mTimer1 = new Runnable() {
             @Override
             public void run() {
@@ -157,6 +164,10 @@ public class GpuFragment extends Fragment {
         mHandler.removeCallbacks(mTimer1);
         mHandler.removeCallbacks(mTimer2);
         mHandler.removeCallbacks(mTimer3);
+        if (!timerSingleton.isRunning())
+        {
+            timerSingleton.start();
+        }
         super.onPause();
     }
 

@@ -39,8 +39,6 @@ public class HddFragment extends Fragment {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        singletonTimer.stop();
-
         GraphView graph = (GraphView) view.findViewById(R.id.graph);
         mSeries1 = new LineGraphSeries<>();
         mSeries1.setTitle("HDD Load");
@@ -51,7 +49,8 @@ public class HddFragment extends Fragment {
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(40);
         graph.getLegendRenderer().setVisible(true);
-        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.MIDDLE);
+        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        graph.getGridLabelRenderer().setVerticalAxisTitle(" ");
 
         GraphView graph2 = (GraphView) view.findViewById(R.id.graph2);
         mSeries2 = new LineGraphSeries<>();
@@ -61,7 +60,8 @@ public class HddFragment extends Fragment {
         graph2.getViewport().setMinX(0);
         graph2.getViewport().setMaxX(40);
         graph2.getLegendRenderer().setVisible(true);
-        graph2.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.MIDDLE);
+        graph2.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        graph2.getGridLabelRenderer().setVerticalAxisTitle(" ");
 
         timer.start();
 
@@ -81,6 +81,10 @@ public class HddFragment extends Fragment {
         super.onPause();
         singletonTimer.start();
         timer.cancel();
+        if(!singletonTimer.isRunning())
+        {
+            singletonTimer.start();
+        }
     }
 
     protected CountDownTimer timer = new CountDownTimer(1000, 1000) {
