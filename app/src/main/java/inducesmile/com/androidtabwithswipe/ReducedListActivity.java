@@ -39,10 +39,10 @@ import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
 
 /**
- * Created by Cube on 11/14/2016.
+ * Created by Cube on 11/21/2016.
  */
 
-public class ListActivity2 extends Activity {
+public class ReducedListActivity extends Activity {
 
     private LineChartView chartTop;
     private ColumnChartView chartBottom;
@@ -56,7 +56,7 @@ public class ListActivity2 extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_activity2);
 
-        dialog = ProgressDialog.show(ListActivity2.this, "",
+        dialog = ProgressDialog.show(ReducedListActivity.this, "",
                 "Loading your chart. Please wait...", true);
 
         try {
@@ -108,7 +108,7 @@ public class ListActivity2 extends Activity {
         chartBottom.setColumnChartData(columnData);
 
         // Set value touch listener that will trigger changes for chartTop.
-        chartBottom.setOnValueTouchListener(new ListActivity2.ValueTouchListener());
+        chartBottom.setOnValueTouchListener(new ReducedListActivity.ValueTouchListener());
 
         // Set selection mode to keep selected month column highlighted.
         chartBottom.setValueSelectionEnabled(true);
@@ -338,7 +338,7 @@ public class ListActivity2 extends Activity {
     }
 
     private Map<Integer, ComputerOuterClass.Computer> getMap() {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43432)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43433)
                 .usePlaintext(true)
                 .build();
         computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);

@@ -30,7 +30,11 @@
         <activity android:name=".TestActivity2"/>
         <activity android:name=".ListActivity"/>
         <activity android:name=".ListActivity2"/>
+        <activity android:name=".ReducedListActivity"/>
         <activity android:name=".ChartTest"
+            android:hardwareAccelerated="true"
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".ChartReduced"
             android:hardwareAccelerated="true"
             android:theme="@style/AppTheme"/>
     </application>

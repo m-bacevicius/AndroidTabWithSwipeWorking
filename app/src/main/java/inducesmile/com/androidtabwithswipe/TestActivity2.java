@@ -15,7 +15,9 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -43,6 +45,12 @@ public class TestActivity2 extends Activity {
         setContentView(R.layout.test_activity2);
 
         mContext = getApplicationContext();
+
+        Display d = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int width = d.getWidth();
+        int height = d.getHeight();
+        Log.d("Screen width", String.valueOf(width));
+        Log.d("Screen height", String.valueOf(height));
 
         /*if (!timer.isRunning() && readFromPref() != "")
         {
@@ -83,6 +91,18 @@ public class TestActivity2 extends Activity {
         ((Button) findViewById(R.id.button2)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ListActivity2.class);
+                startActivity(intent);
+            }
+        });
+        ((Button) findViewById(R.id.button4)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ChartReduced.class);
+                startActivity(intent);
+            }
+        });
+        ((Button) findViewById(R.id.button5)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ReducedListActivity.class);
                 startActivity(intent);
             }
         });
