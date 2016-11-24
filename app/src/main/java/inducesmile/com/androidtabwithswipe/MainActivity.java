@@ -125,13 +125,11 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     break;
                 case 2:
                     //fragment = new CpuFragment2();
-                    fragment = new PopMusicFragment();
+                    //fragment = new PopMusicFragment();
                     //fragment = new RapMusicFragment();
-                    break;
-                case 3:
                     fragment = new RamFragment();
                     break;
-                case 4:
+                case 3:
                     fragment = new HddFragment();
                     break;
             }
@@ -141,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 5;
+            return 4;
         }
 
         @Override
@@ -153,10 +151,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
                 case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
-                case 3:
                     return getString(R.string.title_section4).toUpperCase(l);
-                case 4:
+                case 3:
                     return getString(R.string.title_section5).toUpperCase(l);
             }
             return null;

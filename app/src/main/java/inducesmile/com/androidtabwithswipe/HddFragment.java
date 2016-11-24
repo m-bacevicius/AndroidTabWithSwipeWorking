@@ -93,7 +93,7 @@ public class HddFragment extends Fragment {
 
         public void onTick(long millisUntilFinished) {
             try {
-                ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43431)
+                ManagedChannel channel = ManagedChannelBuilder.forAddress(getIP(), 43431)
                         .usePlaintext(true)
                         .build();
                 //ComputerOuterClass.ComputerName request = ComputerOuterClass.ComputerName.newBuilder().setName(name).build();
@@ -125,5 +125,11 @@ public class HddFragment extends Fragment {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
         String name = settings.getString("name", "");
         return name;
+    }
+    private String getIP()
+    {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String Ip = settings.getString("Ip", "");
+        return Ip;
     }
 }

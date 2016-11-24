@@ -1,14 +1,11 @@
 package inducesmile.com.androidtabwithswipe;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -17,9 +14,6 @@ import android.util.Log;
 
 import com.example.ComputerOuterClass;
 import com.example.computerServiceGrpc;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -46,25 +40,25 @@ public class TimerSingleton {
     private Runnable runnable = new Runnable() {
         public void run() {
             Log.e("TIMER", "IS WORKING");
-            ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43431)
+            ManagedChannel channel = ManagedChannelBuilder.forAddress(getIP(SecondScreen.getContext()), 43431)
                     .usePlaintext(true)
                     .build();
             computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);
-            ComputerOuterClass.Computer response = stub.getRealtimeComputerWithName(ComputerOuterClass.ComputerName.newBuilder().setName(readFromPref(TestActivity2.getContext())).build());
+            ComputerOuterClass.Computer response = stub.getRealtimeComputerWithName(ComputerOuterClass.ComputerName.newBuilder().setName(readFromPref(SecondScreen.getContext())).build());
             try {
                 if (Integer.valueOf(response.getCpuPackageLoad()) >= 50 && counter >= 60) {
                     Log.e("Timer", "CPU is heavily loaded");
-                    getNotification2(TestActivity2.getContext(), "Heavy load for CPU has been detected: " + response.getCpuPackageLoad());
+                    getNotification2(SecondScreen.getContext(), "Heavy load for CPU has been detected: " + response.getCpuPackageLoad());
                     counter = 0;
                 }
                 else if (Integer.valueOf(response.getGpuLoad()) >= 50 && counter >= 60)
                 {
-                    getNotification2(TestActivity2.getContext(), "Heavy load for GPU has been detected: " + response.getGpuLoad());
+                    getNotification2(SecondScreen.getContext(), "Heavy load for GPU has been detected: " + response.getGpuLoad());
                     counter = 0;
                 }
                 else if (Float.valueOf(response.getLoadRam()) >= 90 && counter >= 60)
                 {
-                    getNotification2(TestActivity2.getContext(), "Heavy load for RAM has been detected: " + response.getLoadRam());
+                    getNotification2(SecondScreen.getContext(), "Heavy load for RAM has been detected: " + response.getLoadRam());
                     counter = 0;
                 }
                 else {
@@ -93,6 +87,13 @@ public class TimerSingleton {
         return name;
     }
 
+    private String getIP(Context context)
+    {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        String Ip = settings.getString("Ip", "");
+        return Ip;
+    }
+
     public static void getNotification2(Context context, String content) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder
@@ -112,7 +113,7 @@ public class TimerSingleton {
         //.setStyle(new NotificationCompat.BigTextStyle())
         ;
         // Setting notification style
-        Intent intent = new Intent(context, TestActivity2.class);       //TODO was () instead of context, TestActivity2.class
+        Intent intent = new Intent(context, SecondScreen.class);       //TODO was () instead of context, TestActivity2.class
         //TODO look for a better result
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, 0);
@@ -122,7 +123,7 @@ public class TimerSingleton {
         PendingIntent realtime = PendingIntent.getActivity(context, 0, realtimeIntent, 0);
         builder.addAction(R.mipmap.ic_flash, "REALTIME", realtime);
 
-        Intent chartIntent = new Intent(context, ChartTest.class);
+        Intent chartIntent = new Intent(context, ChartActivity.class);
         PendingIntent chartPendlingIntent = PendingIntent.getActivity(context, 0, chartIntent, 0);
         builder.addAction(R.mipmap.ic_chart, "LAST 24H", chartPendlingIntent);
 
@@ -170,11 +171,11 @@ public class TimerSingleton {
                 .build();
         //ComputerOuterClass.ComputerName request = ComputerOuterClass.ComputerName.newBuilder().setName(name).build();
         computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);
-        ComputerOuterClass.Computer response = stub.getRealtimeComputerWithName(ComputerOuterClass.ComputerName.newBuilder().setName(readFromPref(TestActivity2.getContext())).build());
+        ComputerOuterClass.Computer response = stub.getRealtimeComputerWithName(ComputerOuterClass.ComputerName.newBuilder().setName(readFromPref(SecondScreen.getContext())).build());
         try {
             if (Integer.valueOf(response.getCpuPackageLoad()) >= 50 && counter >= 600) {
                 Log.e("Timer", "CPU is heavily loaded");
-                getNotification2(TestActivity2.getContext(), "Heavy load for CPU has been detected: " + response.getCpuPackageLoad());
+                getNotification2(SecondScreen.getContext(), "Heavy load for CPU has been detected: " + response.getCpuPackageLoad());
                 counter = 0;
             } else {
                 Log.d("Timer gRPC", response.getCpuPackageLoad());

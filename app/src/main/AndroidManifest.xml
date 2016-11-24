@@ -20,18 +20,18 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
         </activity>
-        <activity android:name=".TestActivity">
+        <activity android:name=".FirstScreen">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
-        <activity android:name=".TestActivity2"/>
+        <activity android:name=".SecondScreen"/>
         <activity android:name=".ListActivity"/>
-        <activity android:name=".ListActivity2"/>
-        <activity android:name=".ReducedListActivity"/>
-        <activity android:name=".ChartTest"
+        <activity android:name=".DependecyChart"/>
+        <activity android:name=".ReducedDependencyChart"/>
+        <activity android:name=".ChartActivity"
             android:hardwareAccelerated="true"
             android:theme="@style/AppTheme"/>
         <activity android:name=".ChartReduced"

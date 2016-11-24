@@ -42,7 +42,7 @@ import lecho.lib.hellocharts.view.LineChartView;
  * Created by Cube on 11/14/2016.
  */
 
-public class ListActivity2 extends Activity {
+public class DependecyChart extends Activity {
 
     private LineChartView chartTop;
     private ColumnChartView chartBottom;
@@ -54,9 +54,9 @@ public class ListActivity2 extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_activity2);
+        setContentView(R.layout.dependency_chart);
 
-        dialog = ProgressDialog.show(ListActivity2.this, "",
+        dialog = ProgressDialog.show(DependecyChart.this, "",
                 "Loading your chart. Please wait...", true);
 
         try {
@@ -108,7 +108,7 @@ public class ListActivity2 extends Activity {
         chartBottom.setColumnChartData(columnData);
 
         // Set value touch listener that will trigger changes for chartTop.
-        chartBottom.setOnValueTouchListener(new ListActivity2.ValueTouchListener());
+        chartBottom.setOnValueTouchListener(new DependecyChart.ValueTouchListener());
 
         // Set selection mode to keep selected month column highlighted.
         chartBottom.setValueSelectionEnabled(true);
@@ -338,7 +338,7 @@ public class ListActivity2 extends Activity {
     }
 
     private Map<Integer, ComputerOuterClass.Computer> getMap() {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43432)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(getIP(), 43432)
                 .usePlaintext(true)
                 .build();
         computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);
@@ -372,5 +372,11 @@ public class ListActivity2 extends Activity {
             dialog.hide();
             //dialog.hide();
         }
+    }
+    private String getIP()
+    {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        String Ip = settings.getString("Ip", "");
+        return Ip;
     }
 }

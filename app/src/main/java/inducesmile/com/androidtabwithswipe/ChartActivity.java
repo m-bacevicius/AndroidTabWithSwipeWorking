@@ -1,42 +1,23 @@
 package inducesmile.com.androidtabwithswipe;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.app.TaskStackBuilder;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ListView;
 
 import com.example.ComputerOuterClass;
 import com.example.computerServiceGrpc;
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.jjoe64.graphview.series.DataPoint;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +28,7 @@ import io.grpc.ManagedChannelBuilder;
  * Created by Cube on 10/30/2016.
  */
 
-public class ChartTest extends Activity {
+public class ChartActivity extends Activity {
 
     LineChart chart;
     LineChart chart2;
@@ -55,13 +36,13 @@ public class ChartTest extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chart_test);
+        setContentView(R.layout.chart_activity);
 
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
 
-        dialog = ProgressDialog.show(ChartTest.this, "",
+        dialog = ProgressDialog.show(ChartActivity.this, "",
                 "Loading your chart. Please wait...", true);
 
         chart = (LineChart) findViewById(R.id.chart);
@@ -90,7 +71,7 @@ public class ChartTest extends Activity {
             LineData lineData = new LineData();
 
             LineDataSet tempDataSet = new LineDataSet(fillUpTheChart(result, "Load").get(0), "CPU Load");
-            tempDataSet.setColor(Color.YELLOW);
+            tempDataSet.setColor(Color.MAGENTA);
             tempDataSet.setDrawCircles(false);
             lineData.addDataSet(tempDataSet);
 
@@ -117,7 +98,7 @@ public class ChartTest extends Activity {
             LineData lineData2 = new LineData();
 
             tempDataSet = new LineDataSet(fillUpTheChart(result, "Temperature").get(0), "CPU Temperature");
-            tempDataSet.setColor(Color.YELLOW);
+            tempDataSet.setColor(Color.MAGENTA);
             tempDataSet.setDrawCircles(false);
             lineData2.addDataSet(tempDataSet);
 
@@ -142,7 +123,7 @@ public class ChartTest extends Activity {
     }
 
     private Map<Integer, ComputerOuterClass.Computer> getMap() {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43432)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(getIP(), 43432)
                 .usePlaintext(true)
                 .build();
         computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);
@@ -205,5 +186,11 @@ public class ChartTest extends Activity {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String name = settings.getString("name", "");
         return name;
+    }
+    private String getIP()
+    {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        String Ip = settings.getString("Ip", "");
+        return Ip;
     }
 }

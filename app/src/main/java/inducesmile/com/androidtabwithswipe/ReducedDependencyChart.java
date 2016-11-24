@@ -2,12 +2,17 @@ package inducesmile.com.androidtabwithswipe;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.example.ComputerOuterClass;
 import com.example.computerServiceGrpc;
@@ -42,7 +47,7 @@ import lecho.lib.hellocharts.view.LineChartView;
  * Created by Cube on 11/21/2016.
  */
 
-public class ReducedListActivity extends Activity {
+public class ReducedDependencyChart extends Activity implements AdapterView.OnItemSelectedListener {
 
     private LineChartView chartTop;
     private ColumnChartView chartBottom;
@@ -51,33 +56,48 @@ public class ReducedListActivity extends Activity {
     private ColumnChartData columnData;
     private List<List<ComputerOuterClass.Computer>> dataList;
     protected static ProgressDialog dialog;
+    private GetChart1 asyncRate = new GetChart1();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_activity2);
+        setContentView(R.layout.reduced_dependency_chart);
 
-        dialog = ProgressDialog.show(ReducedListActivity.this, "",
+        dialog = ProgressDialog.show(ReducedDependencyChart.this, "",
                 "Loading your chart. Please wait...", true);
 
         try {
-            GetChart1 asyncRate = new GetChart1();
-            asyncRate.execute();
+            asyncRate = new GetChart1();
+            asyncRate.execute(String.valueOf(((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth()), "Avg");
         } catch (Exception e) {
         }
-        //dataList = getList(getMap());         //TODO change if neccessary
 
         // *** TOP LINE CHART ***
-        chartTop = (LineChartView)findViewById(R.id.chart_top);
+        chartTop = (LineChartView) findViewById(R.id.chart_top);
 
         // Generate and set data for line chart
         //generateInitialLineData();            //Transported to onPostExecute
 
         // *** BOTTOM COLUMN CHART ***
 
-        chartBottom = (ColumnChartView)findViewById(R.id.chart_bottom);
-
-        //generateColumnData();                 //Transported to onPostExecute
+        chartBottom = (ColumnChartView) findViewById(R.id.chart_bottom);
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // On selecting a spinner item
+        String item = parent.getItemAtPosition(position).toString();
+
+        // Showing selected spinner item
+        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+        //asyncRate = new GetChart1();
+        //asyncRate.execute(String.valueOf(((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth()), "Avg");
+    }
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
+    }
+
+
+
     private void generateColumnData() {
 
         int numSubcolumns = 1;
@@ -108,26 +128,16 @@ public class ReducedListActivity extends Activity {
         chartBottom.setColumnChartData(columnData);
 
         // Set value touch listener that will trigger changes for chartTop.
-        chartBottom.setOnValueTouchListener(new ReducedListActivity.ValueTouchListener());
+        chartBottom.setOnValueTouchListener(new ReducedDependencyChart.ValueTouchListener());
 
         // Set selection mode to keep selected month column highlighted.
         chartBottom.setValueSelectionEnabled(true);
 
         chartBottom.setZoomType(ZoomType.HORIZONTAL);
-
-        // chartBottom.setOnClickListener(new View.OnClickListener() {
-        //
-        // @Override
-        // public void onClick(View v) {
-        // SelectedValue sv = chartBottom.getSelectedValue();
-        // if (!sv.isSet()) {
-        // generateInitialLineData();
-        // }
-        //
-        // }
-        // });
-
     }
+
+
+
     private void generateInitialLineData() {
         int numValues = 3600;
 
@@ -193,12 +203,11 @@ public class ReducedListActivity extends Activity {
         Line line4 = lineData.getLines().get(3);// For this example there is always only one line.
         //line4.setColor(color);
 
-        for (int x = 0; x < line.getValues().size(); x++)
-        {
-            line.getValues().get(x).setTarget(line4.getValues().get(x).getX(), (float) Math.random() * range);
-            line2.getValues().get(x).setTarget(line4.getValues().get(x).getX(), (float) Math.random() * range);
-            line3.getValues().get(x).setTarget(line4.getValues().get(x).getX(), (float) Math.random() * range);
-            line4.getValues().get(x).setTarget(line4.getValues().get(x).getX(), (float) Math.random() * range);
+        for (int x = 0; x < line.getValues().size(); x++) {
+            line.getValues().get(x).setTarget(line.getValues().get(x).getX(), (float) Math.random() * range);
+            line2.getValues().get(x).setTarget(line.getValues().get(x).getX(), (float) Math.random() * range);
+            line3.getValues().get(x).setTarget(line.getValues().get(x).getX(), (float) Math.random() * range);
+            line4.getValues().get(x).setTarget(line.getValues().get(x).getX(), (float) Math.random() * range);
         }
 
         // Start new data animation with 300ms duration;
@@ -237,8 +246,7 @@ public class ReducedListActivity extends Activity {
             values4.add(new PointValue(i, Float.valueOf(list.get(i).getHddLoad())));
         }*/
 
-        for (int x = 0; x < list.size(); x++)
-        {
+        for (int x = 0; x < list.size(); x++) {
             line.getValues().get(x).setTarget(x, Float.valueOf((list.get(x).getCpuPackageLoad())));
             line2.getValues().get(x).setTarget(x, Float.valueOf((list.get(x).getGpuLoad())));
             line3.getValues().get(x).setTarget(x, Float.valueOf((list.get(x).getLoadRam())));
@@ -256,6 +264,7 @@ public class ReducedListActivity extends Activity {
         // Start new data animation with 300ms duration;
         chartTop.startDataAnimation(300);
     }
+
     private class ValueTouchListener implements ColumnChartOnValueSelectListener {
 
         @Override
@@ -299,16 +308,13 @@ public class ReducedListActivity extends Activity {
                 } catch (Exception e) {
                 }
                 if (mapDate == null) {
-                    //Log.e("lol", "found null");
                     isExceded = true;
                     isFinished = true;
                 }
                 if (mapDate != null && mapDate.compareTo(lastDate) < 0) {
-                    //Log.e("lol", "found it smaller");
                     innerList.add(map.get(counter++));
                 }
                 if (mapDate != null && mapDate.compareTo(lastDate) >= 0) {
-                    //Log.e("lol", "found it bigger");
                     isExceded = true;
                     break;
                 }
@@ -331,46 +337,47 @@ public class ReducedListActivity extends Activity {
 
         return cal;
     }
+
     private String readFromPref() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String name = settings.getString("name", "");
         return name;
     }
+    private String getIP()
+    {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        String Ip = settings.getString("Ip", "");
+        return Ip;
+    }
 
-    private Map<Integer, ComputerOuterClass.Computer> getMap() {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43433)
+    private Map<Integer, ComputerOuterClass.Computer> getMap(String screenSize, String method) {
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(getIP(), 43433)
                 .usePlaintext(true)
                 .build();
         computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);
-        ComputerOuterClass.ComputerListResponse response = stub.getComputerListWithName(ComputerOuterClass.ComputerName.newBuilder().setName(readFromPref()).build());
+
+        ComputerOuterClass.ComputerListResponse response = stub.getComputerListWithName(ComputerOuterClass.ComputerName.newBuilder().setName(screenSize + ";" + readFromPref() + ";" + method).build());
         // System.out.print(response + "The count " + response.getComputerListCount() + '\n');
         Map<Integer, ComputerOuterClass.Computer> map = response.getComputerListMap();
         return map;
     }
-    private class GetChart1 extends AsyncTask<Void, Integer, Map<Integer, ComputerOuterClass.Computer>> {
+
+    private class GetChart1 extends AsyncTask<String, Integer, Map<Integer, ComputerOuterClass.Computer>> {
 
         @Override
-        protected Map<Integer, ComputerOuterClass.Computer>  doInBackground(Void... params) {
+        protected Map<Integer, ComputerOuterClass.Computer> doInBackground(String... params) {
             //Map<Integer, ComputerOuterClass.Computer> map = getMap();
-            return getMap();
+            return getMap(params[0], params[1]);
         }
 
         @Override
         protected void onPostExecute(Map<Integer, ComputerOuterClass.Computer> result) {
             // Do whatever you need with the string, you can update your UI from here
             dataList = getList(result);
-            if (dataList == null)
-            {
-                Log.e("onPost", "didnt work out");
-            }
-            else
-            {
-                Log.e("onPost", "did work out, does it work?");
-            }
+
             generateInitialLineData();
             generateColumnData();
             dialog.hide();
-            //dialog.hide();
         }
     }
 }

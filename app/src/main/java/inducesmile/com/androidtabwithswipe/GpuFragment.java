@@ -77,8 +77,7 @@ public class GpuFragment extends Fragment {
         graph.addSeries(mSeries1);
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setScalable(true);
-        graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(440);
+        graph.getViewport().setMaxX(40);
         graph.getLegendRenderer().setVisible(true);
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         graph.getGridLabelRenderer().setVerticalAxisTitle(" ");
@@ -90,9 +89,7 @@ public class GpuFragment extends Fragment {
         graph2.getViewport().setYAxisBoundsManual(true);
         graph2.getViewport().setXAxisBoundsManual(true);
         graph2.getViewport().setScalable(true);
-        graph2.getViewport().setMinX(0);
         graph2.getViewport().setMaxX(40);
-        graph2.getViewport().setMinY(45);
         graph2.getViewport().setMaxY(100);
         graph2.getLegendRenderer().setVisible(true);
         graph2.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
@@ -104,7 +101,7 @@ public class GpuFragment extends Fragment {
         mSeries3.setAnimated(true);
         graph3.addSeries(mSeries3);
         graph3.getViewport().setXAxisBoundsManual(true);
-        graph3.getViewport().setMaxX(120);
+        graph3.getViewport().setMaxX(40);
         graph3.getViewport().setScalable(true);
         graph3.getLegendRenderer().setVisible(true);
         graph3.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
@@ -172,7 +169,7 @@ public class GpuFragment extends Fragment {
     }
 
     public void getGrpcData(String name) throws InterruptedException {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43431)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(getIP(), 43431)
                 .usePlaintext(true)
                 .build();
         //ComputerOuterClass.ComputerName request = ComputerOuterClass.ComputerName.newBuilder().setName(name).build();
@@ -186,6 +183,12 @@ public class GpuFragment extends Fragment {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
         String name = settings.getString("name", "");
         return name;
+    }
+    private String getIP()
+    {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String Ip = settings.getString("Ip", "");
+        return Ip;
     }
 
 }

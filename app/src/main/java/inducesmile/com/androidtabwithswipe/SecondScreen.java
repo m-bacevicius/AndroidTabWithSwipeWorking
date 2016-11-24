@@ -8,9 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -34,7 +32,7 @@ import java.io.UnsupportedEncodingException;
  * Created by Cube on 10/25/2016.
  */
 
-public class TestActivity2 extends Activity {
+public class SecondScreen extends Activity {
 
     private static Context mContext;
     TimerSingleton timer = TimerSingleton.getInstance();
@@ -42,7 +40,7 @@ public class TestActivity2 extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.test_activity2);
+        setContentView(R.layout.second_screen);
 
         mContext = getApplicationContext();
 
@@ -76,21 +74,13 @@ public class TestActivity2 extends Activity {
         });
         ((Button) findViewById(R.id.goToTest)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ChartTest.class);
+                Intent intent = new Intent(getApplicationContext(), ChartActivity.class);
                 startActivity(intent);
-            }
-        });
-        ((Button) findViewById(R.id.button3)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getNotification2();
-                //redFlashLight();          //TODO WORKS!!!
-                timer.stop();
-                ((TextView)findViewById(R.id.someTextView1)).setText(String.valueOf(timer.isRunning()));
             }
         });
         ((Button) findViewById(R.id.button2)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ListActivity2.class);
+                Intent intent = new Intent(getApplicationContext(), DependecyChart.class);
                 startActivity(intent);
             }
         });
@@ -102,7 +92,7 @@ public class TestActivity2 extends Activity {
         });
         ((Button) findViewById(R.id.button5)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ReducedListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ReducedDependencyChart.class);
                 startActivity(intent);
             }
         });
@@ -121,12 +111,8 @@ public class TestActivity2 extends Activity {
 
                 if(isChecked){
                     timer.setIsEnabled(true);
-                    ((TextView)findViewById(R.id.someTextView1)).setText(String.valueOf(timer.isRunning()));
-                    ((TextView)findViewById(R.id.someTextView1)).setTextColor(Color.rgb(0,135,38));
                 }else{
                     timer.setIsEnabled(false);
-                    ((TextView)findViewById(R.id.someTextView1)).setText(String.valueOf(timer.isRunning()));
-                    ((TextView)findViewById(R.id.someTextView1)).setTextColor(Color.rgb(153,0,0));
                     getNotification2();
                 }
 
@@ -171,14 +157,14 @@ public class TestActivity2 extends Activity {
         Intent intent = new Intent();
 
 
-        PendingIntent contentIntent = PendingIntent.getActivity(TestActivity2.this, 0, intent, 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(SecondScreen.this, 0, intent, 0);
         builder.setContentIntent(contentIntent);
 
         Intent realtimeIntent = new Intent(getApplicationContext(), MainActivity.class);
         PendingIntent realtime = PendingIntent.getActivity(this, 0, realtimeIntent, 0);
         builder.addAction(R.mipmap.ic_flash, "REALTIME", realtime);
 
-        Intent chartIntent = new Intent(getApplicationContext(), ChartTest.class);
+        Intent chartIntent = new Intent(getApplicationContext(), ChartActivity.class);
         PendingIntent chartPendlingIntent = PendingIntent.getActivity(this, 0, chartIntent, 0);
         builder.addAction(R.mipmap.ic_chart, "LAST 24H", chartPendlingIntent);
 
@@ -200,8 +186,8 @@ public class TestActivity2 extends Activity {
 
     public void getNotification() {
         Intent intent = new Intent();
-        PendingIntent pIntent = PendingIntent.getActivity(TestActivity2.this, 0, intent, 0);
-        Notification notification = new Notification.Builder(TestActivity2.this)
+        PendingIntent pIntent = PendingIntent.getActivity(SecondScreen.this, 0, intent, 0);
+        Notification notification = new Notification.Builder(SecondScreen.this)
                 .setTicker("Ticker Title")
                 .setContentTitle("Content Title")
                 .setContentText("This is a content test")
@@ -217,7 +203,7 @@ public class TestActivity2 extends Activity {
     void redFlashLight() {
         Notification.Builder builder = new Notification.Builder(getContext());
         Intent intent = new Intent();
-        PendingIntent pIntent = PendingIntent.getActivity(TestActivity2.this, 0, intent, 0);
+        PendingIntent pIntent = PendingIntent.getActivity(SecondScreen.this, 0, intent, 0);
         builder.setContentIntent(pIntent)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setTicker("My Ticker")

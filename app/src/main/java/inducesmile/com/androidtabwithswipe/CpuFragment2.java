@@ -76,14 +76,6 @@ public class CpuFragment2 extends Fragment {
         Toast toast = Toast.makeText(getContext(), DeviceName, Toast.LENGTH_SHORT);
         toast.show();
 
-        ((Button) view.findViewById(R.id.testButton)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), TestActivity.class);
-                onPause();
-                startActivity(intent);
-            }
-        });
-
         //getSqlData();
         try {
             getGrpcData(DeviceName);
@@ -151,10 +143,10 @@ public class CpuFragment2 extends Fragment {
         Log.e("onResume", "ONRESUME");
         timerSingleton.stop();
 
-        timer.start();
+        //timer.start();
 
 
-        /*mTimer1 = new Runnable() {
+        mTimer1 = new Runnable() {
             @Override
             public void run() {
                 try {
@@ -202,57 +194,31 @@ public class CpuFragment2 extends Fragment {
                 mHandler.postDelayed(this, 1000);
             }
         };
-        mHandler.postDelayed(mTimer3, 1000);*/
+        mHandler.postDelayed(mTimer3, 1000);
     }
-    CountDownTimer timer = new CountDownTimer(1000, 1000) {
-
-        public void onTick(long millisUntilFinished) {
-            Log.e("CpuFragment", "Running");
-            try{
-                getGrpcData(DeviceName);
-            }
-            catch (Exception e)
-            {
-                Log.e("CpuFragment", e.toString());
-            }
-                graphLastXValue += 1d;
-                for (int x = 0; x < CoreTemp.length; x++) {
-                    mSeriesCpuCoreTemp.get(x).appendData(new DataPoint(graphLastXValue, Double.valueOf(CoreTemp[x])), true, 40);
-                    mSeriesCpuCoreLoad.get(x).appendData(new DataPoint(graphLastXValue, Double.valueOf(CoreLoad[x])), true, 40);
-                    mSeriesCpuCoreClock.get(x).appendData(new DataPoint(graphLastXValue, Double.valueOf(CoreClock[x])), true, 40);
-                }
-            }
-
-        public void onFinish() {
-            start();
-        }
-    };
 
     @Override
     public void onPause() {
         super.onPause();
-        /*mHandler.removeCallbacks(mTimer1);
+        mHandler.removeCallbacks(mTimer1);
         mHandler.removeCallbacks(mTimer2);
-        mHandler.removeCallbacks(mTimer3);*/
+        mHandler.removeCallbacks(mTimer3);
         Log.e("CpuFragment", "onPause");
-        timer.cancel();
-        if (!timerSingleton.isRunning())
-        {
+        if (!timerSingleton.isRunning()) {
             timerSingleton.start();
         }
     }
+
     @Override
-    public void onStop()
-    {
+    public void onStop() {
         super.onStop();
-        /*mHandler.removeCallbacks(mTimer1);
+        mHandler.removeCallbacks(mTimer1);
         mHandler.removeCallbacks(mTimer2);
-        mHandler.removeCallbacks(mTimer3);*/
-        timer.cancel();
+        mHandler.removeCallbacks(mTimer3);
     }
 
-    public ComputerOuterClass.Computer getGrpcData (String name) throws InterruptedException {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("158.129.25.160", 43431)
+    public ComputerOuterClass.Computer getGrpcData(String name) throws InterruptedException {
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(getIP(), 43431)
                 .usePlaintext(true)
                 .build();
         //ComputerOuterClass.ComputerName request = ComputerOuterClass.ComputerName.newBuilder().setName(name).build();
@@ -270,27 +236,10 @@ public class CpuFragment2 extends Fragment {
         String name = settings.getString("name", "");
         return name;
     }
-    private class GetChart1 extends AsyncTask<Void, Integer, ComputerOuterClass.Computer> {
-
-        @Override
-        protected ComputerOuterClass.Computer  doInBackground(Void... params) {
-            try{
-                return getGrpcData(DeviceName);
-            }
-            catch (Exception e)
-            {}
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(ComputerOuterClass.Computer result) {
-            // Do whatever you need with the string, you can update your UI from here
-            graphLastXValue += 1d;
-            for (int x = 0; x < CoreTemp.length; x++) {
-                mSeriesCpuCoreTemp.get(x).appendData(new DataPoint(graphLastXValue, Double.valueOf(CoreTemp[x])), true, 40);
-                mSeriesCpuCoreLoad.get(x).appendData(new DataPoint(graphLastXValue, Double.valueOf(CoreLoad[x])), true, 40);
-                mSeriesCpuCoreClock.get(x).appendData(new DataPoint(graphLastXValue, Double.valueOf(CoreClock[x])), true, 40);
-            }
-        }
+    private String getIP()
+    {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String Ip = settings.getString("Ip", "");
+        return Ip;
     }
 }
