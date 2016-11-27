@@ -123,7 +123,7 @@ public class TimerSingleton {
         PendingIntent realtime = PendingIntent.getActivity(context, 0, realtimeIntent, 0);
         builder.addAction(R.mipmap.ic_flash, "REALTIME", realtime);
 
-        Intent chartIntent = new Intent(context, ChartActivity.class);
+        Intent chartIntent = new Intent(context, ChartReduced.class);
         PendingIntent chartPendlingIntent = PendingIntent.getActivity(context, 0, chartIntent, 0);
         builder.addAction(R.mipmap.ic_chart, "LAST 24H", chartPendlingIntent);
 

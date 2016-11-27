@@ -101,36 +101,38 @@ public class FirstScreen extends Activity {
         Log.e("Amount of gotten data", String.valueOf(computerNames.length));
 
         mButtonList = new ArrayList<>();
-        for (int x = 0; x < computerNames.length; x++, deltaButtonNumber++) {
+        if (doRead() != "") {
+            for (int x = 0; x < computerNames.length; x++, deltaButtonNumber++) {
 
             /* can repeat several times*/
 
-            //Create a temporary instance which will be added to the list
-            final Button mButton = new Button(this);
-            mButton.setText(computerNames[x]);
-            mButton.setId(buttonNumber + x);
-            //TODO make onClickListener
-            //mButton.setOnClickListener();
+                //Create a temporary instance which will be added to the list
+                final Button mButton = new Button(this);
+                mButton.setText(computerNames[x]);
+                mButton.setId(buttonNumber + x);
+                //TODO make onClickListener
+                //mButton.setOnClickListener();
 
-            mButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    //String temp = ((Button)findViewById(v.getId()).getText();
-                    Log.i("LOL", String.valueOf(v.getId()));
-                    saveNameToPref("name", computerNames[v.getId() - buttonNumber]);
-                    if (((EditText) findViewById(R.id.editIPBox)).getText().toString() != "") {
-                        saveIP(((EditText) findViewById(R.id.editIPBox)).getText().toString().trim());
+                mButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        //String temp = ((Button)findViewById(v.getId()).getText();
+                        Log.i("LOL", String.valueOf(v.getId()));
+                        saveNameToPref("name", computerNames[v.getId() - buttonNumber]);
+                        if (((EditText) findViewById(R.id.editIPBox)).getText().toString() != "") {
+                            saveIP(((EditText) findViewById(R.id.editIPBox)).getText().toString().trim());
+                        }
+                        saveNameToPref("Ip", ((EditText) findViewById(R.id.editIPBox)).getText().toString().trim());
+                        Intent intent = new Intent(getApplicationContext(), SecondScreen.class);
+                        startActivity(intent);
                     }
-                    saveNameToPref("Ip", ((EditText) findViewById(R.id.editIPBox)).getText().toString().trim());
-                    Intent intent = new Intent(getApplicationContext(), SecondScreen.class);
-                    startActivity(intent);
-                }
-            });
+                });
 
-            //Add the instance to the ArrayList
-            mButtonList.add(mButton);
+                //Add the instance to the ArrayList
+                mButtonList.add(mButton);
 
-            //Add view to the Parent layout in which you want to add your views
-            linearLayout.addView(mButton);
+                //Add view to the Parent layout in which you want to add your views
+                linearLayout.addView(mButton);
+            }
         }
 
 
@@ -138,6 +140,9 @@ public class FirstScreen extends Activity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 doWrite("");
+                Intent intent = new Intent(getApplicationContext(), FirstScreen.class);
+                startActivity(intent);
+                onDestroy();
             }
         });
         Button button2 = (Button) findViewById(R.id.addButton);
@@ -152,7 +157,6 @@ public class FirstScreen extends Activity {
                 mButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         //String temp = ((Button)findViewById(v.getId()).getText();
-                        Log.i("LOL", String.valueOf(v.getId()));
                         saveNameToPref("name", computerNames[v.getId() - buttonNumber]);
                         Intent intent = new Intent(getApplicationContext(), SecondScreen.class);
                         startActivity(intent);
@@ -164,8 +168,18 @@ public class FirstScreen extends Activity {
 
                 //Add view to the Parent layout in which you want to add your views
                 linearLayout.addView(mButton);
+                //Reload the page
+                Intent intent = new Intent(getApplicationContext(), FirstScreen.class);
+                startActivity(intent);
+                onDestroy();
+                //because onRestart() doesn't work
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     void doWrite(String string)         //Saves all computer names so you don't have to type it everytime

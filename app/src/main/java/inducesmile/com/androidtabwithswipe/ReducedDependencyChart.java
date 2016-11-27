@@ -123,7 +123,7 @@ public class ReducedDependencyChart extends Activity implements AdapterView.OnIt
         columnData = new ColumnChartData(columns);
 
         columnData.setAxisXBottom(new Axis(axisValues).setHasLines(true));
-        columnData.setAxisYLeft(new Axis().setHasLines(true).setMaxLabelChars(2));
+        columnData.setAxisYLeft(new Axis().setHasLines(true).setMaxLabelChars(4));
 
         chartBottom.setColumnChartData(columnData);
 
