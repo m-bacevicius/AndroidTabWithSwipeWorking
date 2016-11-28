@@ -169,7 +169,7 @@ public class GpuFragment extends Fragment {
     }
 
     public void getGrpcData(String name) throws InterruptedException {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(getIP(), 43431)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(getIP(), 43434)
                 .usePlaintext(true)
                 .build();
         //ComputerOuterClass.ComputerName request = ComputerOuterClass.ComputerName.newBuilder().setName(name).build();

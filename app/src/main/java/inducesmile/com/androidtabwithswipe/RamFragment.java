@@ -116,7 +116,7 @@ public class RamFragment extends Fragment {
         public void onTick(long millisUntilFinished) {
             try {
                 Log.e("RamFragment", "Running");
-                ManagedChannel channel = ManagedChannelBuilder.forAddress(getIP(), 43431)
+                ManagedChannel channel = ManagedChannelBuilder.forAddress(getIP(), 43434)
                         .usePlaintext(true)
                         .build();
                 //ComputerOuterClass.ComputerName request = ComputerOuterClass.ComputerName.newBuilder().setName(name).build();
