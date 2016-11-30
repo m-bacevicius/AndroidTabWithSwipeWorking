@@ -40,7 +40,7 @@ public class TimerSingleton {
     private Runnable runnable = new Runnable() {
         public void run() {
             Log.e("TIMER", "IS WORKING");
-            ManagedChannel channel = ManagedChannelBuilder.forAddress(getIP(SecondScreen.getContext()), 43431)
+            ManagedChannel channel = ManagedChannelBuilder.forAddress(getIP(SecondScreen.getContext()), 43434)
                     .usePlaintext(true)
                     .build();
             computerServiceGrpc.computerServiceBlockingStub stub = computerServiceGrpc.newBlockingStub(channel);

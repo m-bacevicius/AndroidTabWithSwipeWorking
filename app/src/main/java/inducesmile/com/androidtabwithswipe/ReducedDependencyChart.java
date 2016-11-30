@@ -140,6 +140,7 @@ public class ReducedDependencyChart extends Activity implements AdapterView.OnIt
 
     private void generateInitialLineData() {
         int numValues = 3600;
+        numValues = dataList.get(0).size();
 
         //List<AxisValue> axisValues = new ArrayList<AxisValue>();
         List<PointValue> values = new ArrayList<PointValue>();
