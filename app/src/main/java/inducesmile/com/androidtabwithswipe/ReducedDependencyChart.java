@@ -140,7 +140,7 @@ public class ReducedDependencyChart extends Activity implements AdapterView.OnIt
 
     private void generateInitialLineData() {
         int numValues = 3600;
-        numValues = dataList.get(0).size();
+        numValues = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth();
 
         //List<AxisValue> axisValues = new ArrayList<AxisValue>();
         List<PointValue> values = new ArrayList<PointValue>();
@@ -175,7 +175,7 @@ public class ReducedDependencyChart extends Activity implements AdapterView.OnIt
         chartTop.setViewportCalculationEnabled(false);
 
         // And set initial max viewport and current viewport- remember to set viewports after data.
-        Viewport v = new Viewport(0, 110, 3600, 0);
+        Viewport v = new Viewport(0, 110, ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth() / 24, 0);
         chartTop.setMaximumViewport(v);
         chartTop.setCurrentViewport(v);
 
