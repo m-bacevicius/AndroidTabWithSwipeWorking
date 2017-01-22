@@ -136,5 +136,6 @@
     <orderEntry type="library" exported="" name="graphview-4.2.1" level="project" />
     <orderEntry type="library" exported="" name="cardview-v7-24.0.0" level="project" />
     <orderEntry type="module" module-name="lib" exported="" />
+    <orderEntry type="library" exported="" name="android-android-24" level="project" />
   </component>
 </module>

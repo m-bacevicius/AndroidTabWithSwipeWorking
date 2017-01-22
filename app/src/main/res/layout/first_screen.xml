@@ -19,9 +19,18 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName|number"
         android:ems="10"
-        android:id="@+id/editIPBox"
+        android:id="@+id/ServerIP"
         android:hint="Server IP"
         android:gravity="center_vertical|center_horizontal|center" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text|textUri"
+        android:ems="10"
+        android:id="@+id/PcIP"
+        android:hint="Computer IP"
+        android:gravity="center" />
 
     <Button
         android:text="Add"

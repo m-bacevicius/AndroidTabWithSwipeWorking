@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -50,7 +51,7 @@ public class FirstScreen extends Activity {
             // Do whatever
         }*/
 
-        if (!((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
+        if (!((ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected()) {
             if (Settings.Secure.getInt(getContentResolver(), "mobile_data", 1) == 1)     //if it's not connected with wifi but connected with mobile data
             {
                 Log.e("MobileData", "connected");
@@ -84,6 +85,7 @@ public class FirstScreen extends Activity {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                         finish();
+                        onDestroy();
                     }
                 });
 
@@ -95,9 +97,9 @@ public class FirstScreen extends Activity {
 
         linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
 
-        ((EditText) findViewById(R.id.editIPBox)).setText(readIp());
+        ((EditText) findViewById(R.id.ServerIP)).setText(readIp());
 
-        computerNames = doRead().split("\n");
+        computerNames = getComputerNames();
         Log.e("Amount of gotten data", String.valueOf(computerNames.length));
 
         mButtonList = new ArrayList<>();
@@ -118,10 +120,13 @@ public class FirstScreen extends Activity {
                         //String temp = ((Button)findViewById(v.getId()).getText();
                         Log.i("LOL", String.valueOf(v.getId()));
                         saveNameToPref("name", computerNames[v.getId() - buttonNumber]);
-                        if (((EditText) findViewById(R.id.editIPBox)).getText().toString() != "") {
-                            saveIP(((EditText) findViewById(R.id.editIPBox)).getText().toString().trim());
+                        if (((EditText) findViewById(R.id.ServerIP)).getText().toString() != "") {
+                            saveIP(((EditText) findViewById(R.id.ServerIP)).getText().toString().trim());
                         }
-                        saveNameToPref("Ip", ((EditText) findViewById(R.id.editIPBox)).getText().toString().trim());
+                        //saveNameToPref("ServerIp", ((EditText) findViewById(R.id.ServerIP)).getText().toString().trim());
+
+                        saveNameToPref("ServerIP", doRead().split("\n")[v.getId() - buttonNumber].split(";")[1]);
+                        saveNameToPref("PcIP", doRead().split("\n")[v.getId() - buttonNumber].split(";")[2]);
                         Intent intent = new Intent(getApplicationContext(), SecondScreen.class);
                         startActivity(intent);
                     }
@@ -148,7 +153,7 @@ public class FirstScreen extends Activity {
         Button button2 = (Button) findViewById(R.id.addButton);
         button2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                doAppend(((EditText) findViewById(R.id.editNameBox)).getText().toString());
+                doAppend(((EditText) findViewById(R.id.editNameBox)).getText().toString() + ";" + ((EditText) findViewById(R.id.ServerIP)).getText().toString().trim() + ";" + ((EditText) findViewById(R.id.PcIP)).getText().toString().trim() );
                 final Button mButton = new Button(getApplicationContext());
                 mButton.setText(((EditText) findViewById(R.id.editNameBox)).getText());
                 mButton.setId(buttonNumber + (deltaButtonNumber++));
@@ -231,6 +236,17 @@ public class FirstScreen extends Activity {
         } catch (IOException e) {
             return "";
         }
+    }
+
+    private String[] getComputerNames ()
+    {
+        String[] result = new String[doRead().split("\n").length];
+        int counter = 0;
+        for (String line : doRead().split("\n"))
+        {
+            result[counter++] = line.split(";")[0];
+        }
+        return result;
     }
 
     String doRead() {

@@ -18,8 +18,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -49,6 +51,37 @@ public class SecondScreen extends Activity {
         int height = d.getHeight();
         Log.d("Screen width", String.valueOf(width));
         Log.d("Screen height", String.valueOf(height));
+        TextView ping = (TextView)findViewById(R.id.pingStatus);
+
+        Log.e("ReadFormPref", "IP = " + readFromPref("PcIP"));
+
+        if (readFromPref("PcIP").contains(":")) {
+
+            if (isPingable(readFromPref("PcIP").split(":")[0], readFromPref("PcIP").split(":")[1])) {
+
+                ping.setText("Succesful");
+                ping.setTextColor(Color.GREEN);
+            } else {
+                ping.setText("Unuccesful");
+                ping.setTextColor(Color.RED);
+            }
+        }
+
+        else
+        {
+            if (isPingable(readFromPref("PcIP"))) {
+
+                ping.setText("Succesful");
+                ping.setTextColor(Color.GREEN);
+            } else {
+                ping.setText("Unuccesful");
+                ping.setTextColor(Color.RED);
+            }
+        }
+
+        ((TextView)findViewById(R.id.testbox1)).setText(readFromPref("ServerIP"));
+        ((TextView)findViewById(R.id.testbox2)).setText(readFromPref("PcIP"));
+
 
         /*if (!timer.isRunning() && readFromPref() != "")
         {
@@ -121,6 +154,60 @@ public class SecondScreen extends Activity {
 
     }
 
+    private boolean isPingable(String IP, String port){
+        Log.e("executeCommand", "running");
+        Runtime runtime = Runtime.getRuntime();
+        try
+        {
+            Process  mIpAddrProcess = runtime.exec("/system/bin/ping -c 1 -p " + port + " " + IP);
+            int mExitValue = mIpAddrProcess.waitFor();
+            Log.e("executeCommand", String.valueOf(mExitValue));
+            if(mExitValue==0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        catch (InterruptedException ignore)
+        {
+            ignore.printStackTrace();
+            Log.e("executeCommand", ignore.toString());
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            Log.e("executeCommand", e.toString());
+        }
+        return false;
+    }
+
+    private boolean isPingable(String IP){
+        Log.e("executeCommand", "running");
+        Runtime runtime = Runtime.getRuntime();
+        try
+        {
+            Process  mIpAddrProcess = runtime.exec("/system/bin/ping -c 1 " + IP);
+            int mExitValue = mIpAddrProcess.waitFor();
+            Log.e("mExitvalue", String.valueOf(mExitValue));
+            if(mExitValue == 0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        catch (InterruptedException ignore)
+        {
+            ignore.printStackTrace();
+            System.out.println(" Exception:"+ignore);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            System.out.println(" Exception:"+e);
+        }
+        return false;
+    }
+
     public static Context getContext() {
         return mContext;
     }
@@ -177,6 +264,12 @@ public class SecondScreen extends Activity {
     String readFromPref() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String name = settings.getString("name", "");
+        return name;
+    }
+    String readFromPref(String key)
+    {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        String name = settings.getString(key, "");
         return name;
     }
 }
